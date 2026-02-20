@@ -1,0 +1,3 @@
+org.springframework.test.context.ContextCustomizerFactory = \
+    itee.licenta.monitorizare.config.\
+    SqlTestContainersSpringContextCustomizerFactory
