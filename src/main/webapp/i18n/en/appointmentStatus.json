@@ -1,0 +1,10 @@
+{
+  "patientMonitorApp": {
+    "AppointmentStatus": {
+      "null": "",
+      "SCHEDULED": "SCHEDULED",
+      "COMPLETED": "COMPLETED",
+      "CANCELLED": "CANCELLED"
+    }
+  }
+}

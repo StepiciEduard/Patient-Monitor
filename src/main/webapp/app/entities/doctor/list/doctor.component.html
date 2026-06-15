@@ -1,0 +1,153 @@
+<div class="entity-page">
+  <div class="entity-header">
+    <h2>🩺 Doctori</h2>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        Actualizeaza
+      </button>
+      <button class="btn-create" [routerLink]="['/doctor/new']" data-cy="entityCreateButton">
+        <fa-icon icon="plus"></fa-icon>
+        Adauga Doctor
+      </button>
+    </div>
+  </div>
+
+  <jhi-alert-error />
+  <jhi-alert />
+
+  @if (adminDoctors.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="empty-icon">🩺</span>
+      <p>Nu au fost gasiti doctori.</p>
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Nume</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Specializare</th>
+            <th>Telefon</th>
+            <th>Cabinet</th>
+            <th>Pacienti</th>
+            <th>Status</th>
+            <th>Actiuni</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (doctor of adminDoctors; track doctor.id) {
+            <tr>
+              <td class="name-cell">{{ doctor.lastName }} {{ doctor.firstName }}</td>
+              <td>
+                <code class="username-code">{{ doctor.login }}</code>
+              </td>
+              <td class="email-cell">{{ doctor.email }}</td>
+              <td>
+                <span class="spec-badge" [class]="'spec-' + getSpecClass(doctor.specialization)">{{ doctor.specialization }}</span>
+              </td>
+              <td>{{ doctor.phone || '--' }}</td>
+              <td>{{ doctor.officeLocation || '--' }}</td>
+              <td>
+                <span class="count-badge">{{ doctor.patientCount }}</span>
+              </td>
+              <td>
+                <span class="status-dot" [class.active]="doctor.activated" [class.inactive]="!doctor.activated">
+                  {{ doctor.activated ? 'Activ' : 'Inactiv' }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <a [routerLink]="['/doctor', doctor.id, 'view']" class="btn-action btn-view" title="Vizualizeaza">
+                    <fa-icon icon="eye"></fa-icon>
+                  </a>
+                  <a [routerLink]="['/doctor', doctor.id, 'edit']" class="btn-action btn-edit" title="Editeaza">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                  </a>
+                  <button
+                    class="btn-action btn-toggle"
+                    (click)="toggleActivation(doctor)"
+                    [title]="doctor.activated ? 'Dezactiveaza' : 'Activeaza'"
+                  >
+                    {{ doctor.activated ? '🔒' : '🔓' }}
+                  </button>
+                  <button class="btn-action btn-reset" (click)="openResetPassword(doctor)" title="Reseteaza parola">🔑</button>
+                  <button class="btn-action btn-delete" (click)="confirmDelete(doctor)" title="Sterge">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Reset Password Modal -->
+  @if (showResetModal && resetTarget) {
+    <div class="modal-overlay" (click)="closeResetModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Reseteaza parola</h3>
+        <p class="modal-subtitle">Pentru: {{ resetTarget.login }}</p>
+        <div class="modal-form">
+          <label>Parola noua:</label>
+          <input type="password" class="form-input" [(ngModel)]="newPassword" placeholder="Minim 4 caractere" />
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeResetModal()">Anuleaza</button>
+            <button class="btn-send" (click)="submitResetPassword()" [disabled]="newPassword.length < 4">Reseteaza</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Doctor Modal with Transfer -->
+  @if (showDeleteModal && deleteTarget) {
+    <div class="modal-overlay" (click)="closeDeleteModal()">
+      <div class="modal-card modal-delete" (click)="$event.stopPropagation()">
+        <h3>⚠️ Stergere doctor</h3>
+        <p class="modal-subtitle">
+          Doctorul <strong>{{ deleteTarget.lastName }} {{ deleteTarget.firstName }}</strong> ({{ deleteTarget.login }})
+        </p>
+
+        @if (deleteTarget.patientCount > 0) {
+          <div class="transfer-section">
+            <p class="transfer-warning">
+              ⚠️ Acest doctor are <strong>{{ deleteTarget.patientCount }}</strong> pacient(i) asociat(i). Selecteaza doctorul la care vor fi
+              transferati inainte de stergere:
+            </p>
+            <div class="modal-form">
+              <label>Transfera pacientii la:</label>
+              <select class="form-input" [(ngModel)]="transferDoctorId">
+                <option [ngValue]="null" disabled>-- Selecteaza doctor --</option>
+                @for (doc of getOtherDoctors(); track doc.id) {
+                  <option [ngValue]="doc.id">
+                    Dr. {{ doc.lastName }} {{ doc.firstName }} — {{ doc.specialization }} ({{ doc.patientCount }} pacienti)
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+        } @else {
+          <p class="no-patients-info">Doctorul nu are pacienti asociati. Poate fi sters direct.</p>
+        }
+
+        @if (deleteError) {
+          <p class="delete-error">{{ deleteError }}</p>
+        }
+
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeDeleteModal()">Anuleaza</button>
+          <button class="btn-delete-confirm" (click)="executeDelete()" [disabled]="deleteTarget.patientCount > 0 && !transferDoctorId">
+            @if (deleteTarget.patientCount > 0) {
+              Transfera si sterge
+            } @else {
+              Sterge definitiv
+            }
+          </button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

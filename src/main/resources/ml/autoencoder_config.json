@@ -1,0 +1,23 @@
+{
+  "CARDIAC": {
+    "features": ["heart_rate", "spo_2", "temperature", "systolic_bp", "diastolic_bp", "respiratory_rate", "hrv", "qt_interval", "bnp"],
+    "threshold": 0.006201744537227944,
+    "scaler_min": [55.0, 76.9, 36.1, 102.0, 65.0, 11.0, 3.0, 361.0, 14.8],
+    "scaler_max": [210.0, 98.8, 37.9, 232.0, 96.0, 39.0, 73.5, 590.0, 4975.3],
+    "input_dim": 9
+  },
+  "DIABETES": {
+    "features": ["heart_rate", "spo_2", "temperature", "systolic_bp", "diastolic_bp", "respiratory_rate", "blood_glucose"],
+    "threshold": 0.012702368907280595,
+    "scaler_min": [59.0, 95.2, 36.2, 75.0, 67.0, 11.0, 71.7],
+    "scaler_max": [157.0, 98.6, 39.0, 151.0, 97.0, 35.0, 640.4],
+    "input_dim": 7
+  },
+  "RESPIRATORY": {
+    "features": ["heart_rate", "spo_2", "temperature", "systolic_bp", "diastolic_bp", "respiratory_rate", "fev_1", "etco_2"],
+    "threshold": 0.016580454387067914,
+    "scaler_min": [58.0, 68.2, 36.2, 101.0, 65.0, 11.0, 8.0, 35.3],
+    "scaler_max": [164.0, 99.8, 37.6, 140.0, 88.0, 44.0, 84.0, 97.1],
+    "input_dim": 8
+  }
+}

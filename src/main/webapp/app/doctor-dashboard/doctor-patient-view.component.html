@@ -1,0 +1,78 @@
+<div class="patient-view">
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Se incarca datele pacientului...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-state">
+      <strong>Eroare!</strong> Nu s-au putut incarca datele.
+      <button class="retry-btn" (click)="loadData()">Reincearca</button>
+    </div>
+  }
+
+  @if (data && !loading) {
+    <div class="view-header">
+      <div class="header-left">
+        <a routerLink="/doctor/dashboard" class="back-link">&larr; Inapoi la lista</a>
+        <h2>{{ data.patientName }}</h2>
+        <p class="subtitle">
+          <span class="badge-type">{{ data.patientType }}</span>
+          <span class="badge-subtype">{{ data.patientSubtype }}</span>
+        </p>
+      </div>
+      <div class="interval-group">
+        @for (int of intervals; track int.value) {
+          <button class="interval-btn" [class.active]="selectedInterval === int.value" (click)="selectInterval(int.value)">
+            {{ int.label }}
+          </button>
+        }
+      </div>
+    </div>
+
+    <span class="readings-count">{{ data.totalReadings }} citiri in intervalul selectat</span>
+
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+      @for (config of vitalConfigs; track config.key) {
+        @if (getLatestValue(config.key) !== null) {
+          <div class="summary-card" [class]="'status-' + getStatusColor(config, getLatestValue(config.key))">
+            <div class="card-label">{{ config.label }}</div>
+            <div class="card-value" [class]="'value-' + getStatusColor(config, getLatestValue(config.key))">
+              {{ getLatestValue(config.key) }}
+            </div>
+            <div class="card-unit">{{ config.unit }}</div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Charts -->
+    <div class="charts-grid">
+      @for (config of vitalConfigs; track config.key) {
+        <div class="chart-card">
+          <div class="chart-header">
+            <span class="chart-title">{{ config.label }} ({{ config.unit }})</span>
+            <span class="chart-badge" [class]="'badge-' + getStatusColor(config, getLatestValue(config.key))">
+              {{ getLatestValue(config.key) ?? '--' }} {{ config.unit }}
+            </span>
+          </div>
+          <div class="chart-body">
+            <div class="chart-container">
+              <canvas [id]="'doc-chart-' + config.key"></canvas>
+            </div>
+          </div>
+          <div class="chart-info">
+            <span class="info-label">Ce masoara: </span>
+            <span class="info-text">{{ config.description }}</span>
+            <br />
+            <span class="info-label">Normal: </span>
+            <span class="info-text">{{ config.normalRange }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

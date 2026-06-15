@@ -1,0 +1,152 @@
+// ============================================
+// Patient Monitoring System - JDL Entity Model
+// ============================================
+
+// ─── ENUMS ───
+
+enum PatientType {
+    CARDIAC,
+    DIABETES,
+    RESPIRATORY
+}
+
+enum PatientSubtype {
+    STABLE,
+    BORDERLINE,
+    CRITICAL
+}
+
+enum AppointmentStatus {
+    SCHEDULED,
+    COMPLETED,
+    CANCELLED
+}
+
+enum NotificationType {
+    THRESHOLD_ALERT,
+    ANOMALY_DETECTED,
+    APPOINTMENT_REMINDER,
+    GENERAL
+}
+
+enum ChatRole {
+    USER,
+    ASSISTANT
+}
+
+// ─── ENTITIES ───
+
+entity Doctor {
+    specialization String required maxlength(100)
+    phone String maxlength(20)
+    officeLocation String maxlength(255)
+}
+
+entity Patient {
+    cnp String required unique maxlength(13) minlength(13)
+    phoneNumber String maxlength(20)
+    address String maxlength(500)
+    patientType PatientType required
+    patientSubtype PatientSubtype required
+    dateOfBirth LocalDate required
+    gender String maxlength(10)
+    hba1c Double
+    bmi Double
+    fev1Baseline Double
+}
+
+entity MedicalData {
+    timestamp Instant required
+    heartRate Integer
+    spo2 Double
+    temperature Double
+    systolicBp Integer
+    diastolicBp Integer
+    // Cardiac specific
+    hrv Double
+    qtInterval Integer
+    bnp Double
+    // Diabetes specific
+    bloodGlucose Double
+    // Respiratory specific
+    respiratoryRate Integer
+    fev1 Double
+    etco2 Double
+    // Anomaly detection
+    anomalyScore Double
+    isAnomaly Boolean
+}
+
+entity Notification {
+    type NotificationType required
+    title String required maxlength(255)
+    message TextBlob required
+    isRead Boolean required
+    createdAt Instant required
+}
+
+entity AppointmentSlot {
+    startTime Instant required
+    endTime Instant required
+    isAvailable Boolean required
+}
+
+entity Appointment {
+    status AppointmentStatus required
+    notes TextBlob
+    createdAt Instant required
+}
+
+entity ChatMessage {
+    role ChatRole required
+    content TextBlob required
+    createdAt Instant required
+    contextStartDate LocalDate
+    contextEndDate LocalDate
+}
+
+// ─── RELATIONSHIPS ───
+
+relationship OneToOne {
+    Doctor{user(login) required} to User with builtInEntity
+    Patient{user(login) required} to User with builtInEntity
+}
+
+relationship ManyToOne {
+    // Patient belongs to a Doctor
+    Patient{doctor(specialization) required} to Doctor
+
+    // Medical data belongs to a Patient
+    MedicalData{patient(id) required} to Patient
+
+    // Notifications
+    Notification{recipientUser(login) required} to User with builtInEntity
+    Notification{senderUser(login)} to User with builtInEntity
+    Notification{relatedPatient} to Patient
+
+    // Appointment slots belong to a Doctor
+    AppointmentSlot{doctor(specialization) required} to Doctor
+
+    // Appointments
+    Appointment{slot required} to AppointmentSlot
+    Appointment{patient(id) required} to Patient
+    Appointment{doctor(specialization) required} to Doctor
+
+    // Chat messages belong to a Patient
+    ChatMessage{patient(id) required} to Patient
+}
+
+// ─── OPTIONS ───
+
+// Pagination for lists
+paginate MedicalData, Notification, ChatMessage with infinite-scroll
+paginate Patient, Doctor, Appointment, AppointmentSlot with pagination
+
+// DTOs for all entities
+dto * with mapstruct
+
+// Service layer for all entities
+service * with serviceClass
+
+// Filter support for querying
+filter MedicalData, Patient, Notification, Appointment, AppointmentSlot

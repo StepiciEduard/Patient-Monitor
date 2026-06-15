@@ -1,0 +1,143 @@
+<div class="appointments-page">
+  <div class="page-header">
+    <h2>Programari</h2>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab-bar">
+    <button class="tab-btn" [class.active]="activeTab === 'available'" (click)="setTab('available')">
+      Sloturi disponibile
+      @if (availableSlots.length > 0) {
+        <span class="tab-count">{{ availableSlots.length }}</span>
+      }
+    </button>
+    <button class="tab-btn" [class.active]="activeTab === 'my'" (click)="setTab('my')">
+      Programarile mele
+      @if (scheduledAppointments.length > 0) {
+        <span class="tab-count active-count">{{ scheduledAppointments.length }}</span>
+      }
+    </button>
+  </div>
+
+  <!-- Available Slots Tab -->
+  @if (activeTab === 'available') {
+    @if (isLoading) {
+      <div class="loading-state">Se incarca...</div>
+    } @else if (availableSlots.length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">📅</span>
+        <p>Nu exista sloturi disponibile momentan.</p>
+        <p class="empty-sub">Doctorul dumneavoastra nu a adaugat inca sloturi de programare.</p>
+      </div>
+    } @else {
+      <div class="slots-by-date">
+        @for (entry of slotsByDate | keyvalue; track entry.key) {
+          <div class="date-group">
+            <h3 class="date-title">{{ entry.key }}</h3>
+            <div class="slots-grid">
+              @for (slot of entry.value; track slot.id) {
+                <div class="slot-card available" (click)="openBookModal(slot)">
+                  <div class="slot-time-big">{{ formatTime(slot.startTime) }}</div>
+                  <div class="slot-time-end">pana la {{ formatTime(slot.endTime) }}</div>
+                  <div class="slot-doctor">{{ slot.doctorName }}</div>
+                  <button class="btn-book">Rezerva</button>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+
+  <!-- My Appointments Tab -->
+  @if (activeTab === 'my') {
+    @if (myAppointments.length === 0) {
+      <div class="empty-state">
+        <span class="empty-icon">📋</span>
+        <p>Nu ai nicio programare.</p>
+      </div>
+    } @else {
+      <!-- Active -->
+      @if (scheduledAppointments.length > 0) {
+        <h3 class="section-title">Programari active</h3>
+        <div class="appointments-list">
+          @for (appt of scheduledAppointments; track appt.id) {
+            <div class="appt-card scheduled">
+              <div class="appt-main">
+                <div class="appt-date">
+                  <span class="appt-day">{{ formatDate(appt.startTime) }}</span>
+                  <span class="appt-time">{{ formatTime(appt.startTime) }} - {{ formatTime(appt.endTime) }}</span>
+                </div>
+                <div class="appt-info">
+                  <span class="appt-doctor">{{ appt.doctorName }}</span>
+                  <span class="status-tag scheduled">Programat</span>
+                </div>
+              </div>
+              @if (appt.notes) {
+                <div class="appt-notes">{{ appt.notes }}</div>
+              }
+              <div class="appt-actions">
+                <button class="btn-cancel-appt" (click)="cancelAppointment(appt.id)">Anuleaza</button>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      <!-- Past -->
+      @if (pastAppointments.length > 0) {
+        <h3 class="section-title">Istoric</h3>
+        <div class="appointments-list">
+          @for (appt of pastAppointments; track appt.id) {
+            <div class="appt-card" [class]="appt.status.toLowerCase()">
+              <div class="appt-main">
+                <div class="appt-date">
+                  <span class="appt-day">{{ formatDate(appt.startTime) }}</span>
+                  <span class="appt-time">{{ formatTime(appt.startTime) }} - {{ formatTime(appt.endTime) }}</span>
+                </div>
+                <div class="appt-info">
+                  <span class="appt-doctor">{{ appt.doctorName }}</span>
+                  <span class="status-tag" [class]="appt.status.toLowerCase()">{{ getStatusLabel(appt.status) }}</span>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  }
+
+  <!-- Book Modal -->
+  @if (showBookModal && bookingSlot) {
+    <div class="modal-overlay" (click)="closeBookModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Confirma programarea</h3>
+
+        @if (bookSuccess) {
+          <div class="modal-success">{{ bookSuccess }}</div>
+        } @else {
+          <div class="booking-details">
+            <p><strong>Data:</strong> {{ formatFullDate(bookingSlot.startTime) }}</p>
+            <p><strong>Ora:</strong> {{ formatTime(bookingSlot.startTime) }} - {{ formatTime(bookingSlot.endTime) }}</p>
+            <p><strong>Medic:</strong> {{ bookingSlot.doctorName }}</p>
+          </div>
+
+          @if (bookError) {
+            <div class="modal-error">{{ bookError }}</div>
+          }
+
+          <div class="modal-form">
+            <label>Motiv consultatie (optional)</label>
+            <textarea class="form-input" rows="3" [(ngModel)]="bookingNotes" placeholder="Descrieti motivul consultatiei..."></textarea>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeBookModal()">Anuleaza</button>
+            <button class="btn-confirm" (click)="confirmBooking()">Confirma programarea</button>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

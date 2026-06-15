@@ -1,0 +1,10 @@
+{
+  "patientMonitorApp": {
+    "PatientSubtype": {
+      "null": "",
+      "STABLE": "STABLE",
+      "BORDERLINE": "BORDERLINE",
+      "CRITICAL": "CRITICAL"
+    }
+  }
+}

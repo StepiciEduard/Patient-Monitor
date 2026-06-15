@@ -1,0 +1,29 @@
+{
+  "patientMonitorApp": {
+    "appointment": {
+      "home": {
+        "title": "Appointments",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Appointment",
+        "createOrEditLabel": "Creeare sau editare Appointment",
+        "notFound": "No Appointments found"
+      },
+      "created": "A fost creată o nouă entitate Appointment cu identificatorul {{ param }}",
+      "updated": "Appointment cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Appointment cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Appointment {{ id }}?"
+      },
+      "detail": {
+        "title": "Appointment"
+      },
+      "id": "ID",
+      "status": "Status",
+      "notes": "Notes",
+      "createdAt": "Created At",
+      "slot": "Slot",
+      "patient": "Patient",
+      "doctor": "Doctor"
+    }
+  }
+}

@@ -3,7 +3,76 @@
 @import 'bootstrap/scss/variables';
 
 /* ==============================================================
-Bootstrap tweaks
+Theme Variables — Dark & Light Mode
+===============================================================*/
+
+:root {
+  /* Accent colors */
+  --accent: #2dd4bf;
+  --accent-light: #5eead4;
+  --accent-rgb: 45, 212, 191;
+
+  /* Background */
+  --bg-primary: #0f1923;
+  --bg-secondary: #162231;
+  --bg-tertiary: #1a2a3a;
+  --bg-hover: #1e3048;
+
+  /* Text */
+  --text-primary: #f0f4f8;
+  --text-secondary: #cbd5e1;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --text-faint: #475569;
+
+  /* Borders */
+  --border-color: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.1);
+
+  /* Status */
+  --success: #4ade80;
+  --warning: #facc15;
+  --danger: #f87171;
+  --info: #2dd4bf;
+
+  /* Shadows */
+  --shadow: rgba(0, 0, 0, 0.4);
+}
+
+/* Light mode */
+[data-theme='light'] {
+  --bg-primary: #f0f5f4;
+  --bg-secondary: #f8faf9;
+  --bg-tertiary: #e6eeec;
+  --bg-hover: #d5e0dd;
+  --text-primary: #1a2e2a;
+  --text-secondary: #2d4a44;
+  --text-muted: #5a7872;
+  --text-dim: #8da5a0;
+  --text-faint: #b5cbc6;
+  --accent: #0d9488;
+  --accent-light: #14b8a6;
+  --border-color: rgba(13, 148, 136, 0.1);
+  --border-light: rgba(13, 148, 136, 0.15);
+  --success: #16a34a;
+  --warning: #ca8a04;
+  --danger: #dc2626;
+  --info: #0d9488;
+  --shadow: rgba(13, 148, 136, 0.08);
+
+  .btn-book {
+    background: rgba(13, 148, 136, 0.15);
+    border-color: rgba(13, 148, 136, 0.4);
+    color: #0d7363;
+  }
+  .btn-confirm {
+    background: #0d9488;
+    color: #ffffff;
+  }
+}
+
+/* ==============================================================
+Global Styles
 ===============================================================*/
 
 body,
@@ -14,67 +83,57 @@ h4 {
   font-weight: 300;
 }
 
-/* Increase contrast of links to get 100% on Lighthouse Accessibility Audit. Override this color if you want to change the link color, or use a Bootswatch theme */
-a {
-  color: #533f03;
-  font-weight: bold;
+body {
+  background: var(--bg-primary);
+  color: var(--text-secondary);
+  transition:
+    background 0.3s ease,
+    color 0.3s ease;
 }
 
-/* override hover color for dropdown-item forced by bootstrap to all a:not([href]):not([tabindex]) elements in _reboot.scss */
+a {
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: var(--accent-light);
+    cursor: pointer;
+  }
+}
+
 a:not([href]):not([tabindex]):hover.dropdown-item {
   color: $dropdown-link-hover-color;
 }
 
-/* override .dropdown-item.active background-color on hover */
 .dropdown-item.active:hover {
-  background-color: mix($dropdown-link-hover-bg, $dropdown-link-active-bg, 50%);
-}
-
-a:hover {
-  color: #533f03;
-  /* make sure browsers use the pointer cursor for anchors, even with no href */
-  cursor: pointer;
+  background-color: rgba(var(--accent-rgb), 0.2);
 }
 
 .dropdown-item:hover {
   color: $dropdown-link-hover-color;
 }
 
-/* ==========================================================================
-Browser Upgrade Prompt
-========================================================================== */
-.browserupgrade {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
-
-/* ==========================================================================
-Generic styles
-========================================================================== */
-
-/* Error highlight on input fields */
+/* Generic styles */
 .ng-valid[required],
 .ng-valid.required {
-  border-left: 5px solid green;
+  border-left: 3px solid var(--success);
 }
 
 .ng-invalid:not(form) {
-  border-left: 5px solid red;
+  border-left: 3px solid var(--danger);
 }
-
-/* other generic styles */
 
 .jh-card {
   padding: 1.5%;
   margin-top: 20px;
   border: none;
+  background: transparent;
 }
 
 .error {
-  color: white;
-  background-color: red;
+  color: #fca5a5;
+  background-color: rgba(239, 68, 68, 0.15);
 }
 
 .pad {
@@ -95,16 +154,39 @@ Generic styles
 }
 
 .form-control {
-  background-color: #fff;
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-light);
+  color: var(--text-secondary);
+
+  &:focus {
+    background-color: var(--bg-hover);
+    color: var(--text-primary);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 0.2rem rgba(var(--accent-rgb), 0.15);
+  }
+
+  &::placeholder {
+    color: var(--text-dim);
+  }
+}
+
+.form-select {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-light);
+  color: var(--text-secondary);
 }
 
 .readonly {
-  background-color: #eee;
-  opacity: 1;
+  background-color: var(--bg-primary);
+  opacity: 0.7;
 }
 
 .footer {
-  border-top: 1px solid rgba(0, 0, 0, 0.125);
+  border-top: 1px solid var(--border-color);
+  color: var(--text-dim);
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.82rem;
 }
 
 .hand,
@@ -112,9 +194,36 @@ Generic styles
   cursor: pointer;
 }
 
-/* ==========================================================================
-Custom alerts for notification
-========================================================================== */
+/* Alerts */
+.alert-success {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #4ade80;
+}
+
+.alert-warning {
+  background: rgba(234, 179, 8, 0.1);
+  border-color: rgba(234, 179, 8, 0.3);
+  color: #facc15;
+
+  .alert-link {
+    color: var(--accent);
+  }
+}
+
+.alert-danger {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+
+.alert-info {
+  background: rgba(var(--accent-rgb), 0.1);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent-light);
+}
+
+/* Toast notifications */
 .alerts {
   .alert {
     text-overflow: ellipsis;
@@ -154,17 +263,36 @@ Custom alerts for notification
   }
 }
 
-/* ==========================================================================
-entity list page css
-========================================================================== */
+/* Tables */
+.table {
+  color: var(--text-secondary);
+
+  thead th {
+    background: var(--bg-secondary);
+    border-color: var(--border-color);
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    border-color: var(--border-color);
+    vertical-align: middle;
+  }
+
+  tbody tr:hover {
+    background: rgba(var(--accent-rgb), 0.05);
+    color: var(--text-primary);
+  }
+}
 
 .table-entities thead th .d-flex > * {
   margin: auto 0;
 }
 
-/* ==========================================================================
-entity detail page css
-========================================================================== */
+/* Entity detail */
 .row-md.jh-entity-details {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -182,18 +310,18 @@ entity detail page css
       text-overflow: ellipsis;
       white-space: nowrap;
       padding: 0.5em 0;
+      color: var(--text-dim);
     }
     dd {
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid var(--border-color);
       padding: 0.5em 0;
       margin-left: 0;
+      color: var(--text-secondary);
     }
   }
 }
 
-/* ==========================================================================
-ui bootstrap tweaks
-========================================================================== */
+/* UI tweaks */
 .nav,
 .pagination,
 .carousel,
@@ -210,22 +338,125 @@ ui bootstrap tweaks
 
 .dropdown-menu {
   padding-left: 0;
+  background: var(--bg-tertiary);
+  border-color: var(--border-light);
+  box-shadow: 0 8px 24px var(--shadow);
 }
 
-/* ==========================================================================
-angular-cli removes postcss-rtl processed inline css, processed rules must be added here instead
-========================================================================== */
-/* page-ribbon.component.scss */
-.ribbon {
-  left: -3.5em;
-  -moz-transform: rotate(-45deg);
-  -ms-transform: rotate(-45deg);
-  -o-transform: rotate(-45deg);
-  -webkit-transform: rotate(-45deg);
-  transform: rotate(-45deg);
+/* Pagination */
+.page-link {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  color: var(--text-muted);
+
+  &:hover {
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--accent);
+    border-color: rgba(var(--accent-rgb), 0.3);
+  }
 }
 
-/* navbar.component.scss */
+.page-item.active .page-link {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0f1923;
+}
+
+.page-item.disabled .page-link {
+  background: var(--bg-primary);
+  border-color: var(--border-color);
+  color: var(--text-faint);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #0f1923;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+    color: #0f1923;
+  }
+}
+
+.btn-info {
+  background: rgba(var(--accent-rgb), 0.15);
+  border-color: rgba(var(--accent-rgb), 0.3);
+  color: var(--accent);
+
+  &:hover {
+    background: rgba(var(--accent-rgb), 0.25);
+    color: var(--accent-light);
+  }
+}
+
+.btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #f87171;
+
+  &:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: #fca5a5;
+  }
+}
+
+.btn-outline-secondary {
+  border-color: var(--border-light);
+  color: var(--text-muted);
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-secondary);
+  }
+}
+
+/* Badges */
+.badge.bg-info {
+  background: rgba(var(--accent-rgb), 0.15) !important;
+  color: var(--accent);
+}
+
+.badge.bg-success {
+  background: rgba(34, 197, 94, 0.15) !important;
+  color: #4ade80;
+}
+
+.badge.bg-danger {
+  background: rgba(239, 68, 68, 0.15) !important;
+  color: #f87171;
+}
+
+.badge.bg-warning {
+  background: rgba(234, 179, 8, 0.15) !important;
+  color: #facc15;
+}
+
+/* Modals */
+.modal-content {
+  background: var(--bg-tertiary);
+  border-color: var(--border-light);
+  color: var(--text-secondary);
+}
+
+.modal-header {
+  border-color: var(--border-color);
+}
+
+.modal-footer {
+  border-color: var(--border-color);
+}
+
+/* Cards */
+.card {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+}
+
+/* Navbar spacing */
 .navbar {
   ul.navbar-nav {
     .nav-item {
@@ -233,4 +464,52 @@ angular-cli removes postcss-rtl processed inline css, processed rules must be ad
     }
   }
 }
+
+/* Form labels */
+label {
+  color: var(--text-muted);
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+/* Checkbox */
+.form-check-input {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-light);
+
+  &:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a3a4a;
+  border-radius: 4px;
+
+  &:hover {
+    background: #3a4a5a;
+  }
+}
+
+[data-theme='light'] {
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    &:hover {
+      background: #94a3b8;
+    }
+  }
+}
+
 /* jhipster-needle-scss-add-main JHipster will add new css style */

@@ -63,15 +63,40 @@ public class SecurityConfiguration {
                     .requestMatchers(mvc.pattern("/i18n/**")).permitAll()
                     .requestMatchers(mvc.pattern("/content/**")).permitAll()
                     .requestMatchers(mvc.pattern("/swagger-ui/**")).permitAll()
+                    // Authentication
                     .requestMatchers(mvc.pattern(HttpMethod.POST, "/api/authenticate")).permitAll()
                     .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/authenticate")).permitAll()
                     .requestMatchers(mvc.pattern("/api/register")).permitAll()
                     .requestMatchers(mvc.pattern("/api/activate")).permitAll()
+                    .requestMatchers(mvc.pattern("/api/public/**")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/init")).permitAll()
                     .requestMatchers(mvc.pattern("/api/account/reset-password/finish")).permitAll()
+                    // Admin endpoints
                     .requestMatchers(mvc.pattern("/api/admin/**")).hasAuthority(AuthoritiesConstants.ADMIN)
+                    // Doctor dashboard endpoints
+                    .requestMatchers(mvc.pattern("/api/doctor/**")).hasAuthority(AuthoritiesConstants.DOCTOR)
+                    // Patient dashboard
+                    .requestMatchers(mvc.pattern("/api/patient/dashboard-data")).hasAuthority(AuthoritiesConstants.PATIENT)
+                    // Doctor entity endpoints
+                    .requestMatchers(mvc.pattern("/api/doctors/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR)
+                    // Patient endpoints
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/patients/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR, AuthoritiesConstants.PATIENT)
+                    .requestMatchers(mvc.pattern("/api/patients/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR)
+                    // Medical data
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/medical-data/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR, AuthoritiesConstants.PATIENT)
+                    .requestMatchers(mvc.pattern("/api/medical-data/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN)
+                    // Notifications
+                    .requestMatchers(mvc.pattern("/api/notifications/**")).authenticated()
+                    // Appointment slots
+                    .requestMatchers(mvc.pattern(HttpMethod.GET, "/api/appointment-slots/**")).hasAnyAuthority(AuthoritiesConstants.DOCTOR, AuthoritiesConstants.PATIENT)
+                    .requestMatchers(mvc.pattern("/api/appointment-slots/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR)
+                    // Appointments
+                    .requestMatchers(mvc.pattern("/api/appointments/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR, AuthoritiesConstants.PATIENT)
+                    // Chat messages
+                    .requestMatchers(mvc.pattern("/api/chat-messages/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.PATIENT)
+                    // Default
                     .requestMatchers(mvc.pattern("/api/**")).authenticated()
-                    .requestMatchers(mvc.pattern("/websocket/**")).authenticated()
+                    .requestMatchers(mvc.pattern("/websocket/tracker/**")).hasAnyAuthority(AuthoritiesConstants.ADMIN, AuthoritiesConstants.DOCTOR, AuthoritiesConstants.PATIENT)
                     .requestMatchers(mvc.pattern("/v3/api-docs/**")).hasAuthority(AuthoritiesConstants.ADMIN)
                     .requestMatchers(mvc.pattern("/management/health")).permitAll()
                     .requestMatchers(mvc.pattern("/management/health/**")).permitAll()

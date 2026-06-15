@@ -1,0 +1,52 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (appointmentSlot(); as appointmentSlotRef) {
+      <div>
+        <h2 data-cy="appointmentSlotDetailsHeading">
+          <span jhiTranslate="patientMonitorApp.appointmentSlot.detail.title">Appointment Slot</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ appointmentSlotRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointmentSlot.startTime">Start Time</span></dt>
+          <dd>
+            <span>{{ appointmentSlotRef.startTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointmentSlot.endTime">End Time</span></dt>
+          <dd>
+            <span>{{ appointmentSlotRef.endTime | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointmentSlot.isAvailable">Is Available</span></dt>
+          <dd>
+            <span>{{ appointmentSlotRef.isAvailable }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointmentSlot.doctor">Doctor</span></dt>
+          <dd>
+            @if (appointmentSlot()!.doctor) {
+              <div>
+                <a [routerLink]="['/doctor', appointmentSlot()!.doctor?.id, 'view']">{{ appointmentSlotRef.doctor?.specialization }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/appointment-slot', appointmentSlotRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

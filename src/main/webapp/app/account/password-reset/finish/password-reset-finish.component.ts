@@ -3,7 +3,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import PasswordStrengthBarComponent from 'app/account/password/password-strength-bar/password-strength-bar.component';
 import SharedModule from 'app/shared/shared.module';
-
 import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
@@ -12,7 +11,7 @@ import { PasswordResetFinishService } from './password-reset-finish.service';
   templateUrl: './password-reset-finish.component.html',
 })
 export default class PasswordResetFinishComponent implements OnInit, AfterViewInit {
-  newPassword = viewChild.required<ElementRef>('newPassword');
+  newPassword = viewChild<ElementRef>('newPassword');
 
   initialized = signal(false);
   doNotMatch = signal(false);
@@ -44,7 +43,10 @@ export default class PasswordResetFinishComponent implements OnInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    this.newPassword().nativeElement.focus();
+    const el = this.newPassword();
+    if (el) {
+      el.nativeElement.focus();
+    }
   }
 
   finishReset(): void {

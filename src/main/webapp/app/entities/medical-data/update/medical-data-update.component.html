@@ -1,0 +1,216 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-medical-data-heading"
+        data-cy="MedicalDataCreateUpdateHeading"
+        jhiTranslate="patientMonitorApp.medicalData.home.createOrEditLabel"
+      >
+        Create or edit a Medical Data
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="patientMonitorApp.medicalData.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let timestampRef = editForm.get('timestamp')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_timestamp" jhiTranslate="patientMonitorApp.medicalData.timestamp">Timestamp</label>
+          <div class="d-flex">
+            <input
+              id="field_timestamp"
+              data-cy="timestamp"
+              type="datetime-local"
+              class="form-control"
+              name="timestamp"
+              formControlName="timestamp"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (timestampRef.invalid && (timestampRef.dirty || timestampRef.touched)) {
+            <div>
+              @if (editForm.get('timestamp')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('timestamp')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_heartRate" jhiTranslate="patientMonitorApp.medicalData.heartRate">Heart Rate</label>
+          <input type="number" class="form-control" name="heartRate" id="field_heartRate" data-cy="heartRate" formControlName="heartRate" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_spo2" jhiTranslate="patientMonitorApp.medicalData.spo2">Spo 2</label>
+          <input type="number" class="form-control" name="spo2" id="field_spo2" data-cy="spo2" formControlName="spo2" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_temperature" jhiTranslate="patientMonitorApp.medicalData.temperature">Temperature</label>
+          <input
+            type="number"
+            class="form-control"
+            name="temperature"
+            id="field_temperature"
+            data-cy="temperature"
+            formControlName="temperature"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_systolicBp" jhiTranslate="patientMonitorApp.medicalData.systolicBp">Systolic Bp</label>
+          <input
+            type="number"
+            class="form-control"
+            name="systolicBp"
+            id="field_systolicBp"
+            data-cy="systolicBp"
+            formControlName="systolicBp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_diastolicBp" jhiTranslate="patientMonitorApp.medicalData.diastolicBp">Diastolic Bp</label>
+          <input
+            type="number"
+            class="form-control"
+            name="diastolicBp"
+            id="field_diastolicBp"
+            data-cy="diastolicBp"
+            formControlName="diastolicBp"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_hrv" jhiTranslate="patientMonitorApp.medicalData.hrv">Hrv</label>
+          <input type="number" class="form-control" name="hrv" id="field_hrv" data-cy="hrv" formControlName="hrv" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_qtInterval" jhiTranslate="patientMonitorApp.medicalData.qtInterval">Qt Interval</label>
+          <input
+            type="number"
+            class="form-control"
+            name="qtInterval"
+            id="field_qtInterval"
+            data-cy="qtInterval"
+            formControlName="qtInterval"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bnp" jhiTranslate="patientMonitorApp.medicalData.bnp">Bnp</label>
+          <input type="number" class="form-control" name="bnp" id="field_bnp" data-cy="bnp" formControlName="bnp" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bloodGlucose" jhiTranslate="patientMonitorApp.medicalData.bloodGlucose">Blood Glucose</label>
+          <input
+            type="number"
+            class="form-control"
+            name="bloodGlucose"
+            id="field_bloodGlucose"
+            data-cy="bloodGlucose"
+            formControlName="bloodGlucose"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_respiratoryRate" jhiTranslate="patientMonitorApp.medicalData.respiratoryRate"
+            >Respiratory Rate</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="respiratoryRate"
+            id="field_respiratoryRate"
+            data-cy="respiratoryRate"
+            formControlName="respiratoryRate"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fev1" jhiTranslate="patientMonitorApp.medicalData.fev1">Fev 1</label>
+          <input type="number" class="form-control" name="fev1" id="field_fev1" data-cy="fev1" formControlName="fev1" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_etco2" jhiTranslate="patientMonitorApp.medicalData.etco2">Etco 2</label>
+          <input type="number" class="form-control" name="etco2" id="field_etco2" data-cy="etco2" formControlName="etco2" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_anomalyScore" jhiTranslate="patientMonitorApp.medicalData.anomalyScore">Anomaly Score</label>
+          <input
+            type="number"
+            class="form-control"
+            name="anomalyScore"
+            id="field_anomalyScore"
+            data-cy="anomalyScore"
+            formControlName="anomalyScore"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_isAnomaly" jhiTranslate="patientMonitorApp.medicalData.isAnomaly">Is Anomaly</label>
+          <input type="checkbox" class="form-check" name="isAnomaly" id="field_isAnomaly" data-cy="isAnomaly" formControlName="isAnomaly" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_patient" jhiTranslate="patientMonitorApp.medicalData.patient">Patient</label>
+          <select
+            class="form-control"
+            id="field_patient"
+            data-cy="patient"
+            name="patient"
+            formControlName="patient"
+            [compareWith]="comparePatient"
+          >
+            @if (!editForm.get('patient')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (patientOption of patientsSharedCollection; track $index) {
+              <option [ngValue]="patientOption">{{ patientOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['patient'])!.invalid && (editForm.get(['patient'])!.dirty || editForm.get(['patient'])!.touched)) {
+          <div>
+            @if (editForm.get(['patient'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

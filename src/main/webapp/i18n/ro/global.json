@@ -11,7 +11,13 @@
         "label": "Etichetă",
         "operation": "Operație",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
-        "adminAuthority": "Authority"
+        "doctor": "Doctor",
+        "patient": "Patient",
+        "medicalData": "Medical Data",
+        "notification": "Notification",
+        "appointmentSlot": "Appointment Slot",
+        "appointment": "Appointment",
+        "chatMessage": "Chat Message"
       },
       "account": {
         "main": "Cont",

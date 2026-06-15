@@ -1,0 +1,310 @@
+.notif-page {
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.notif-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+  }
+}
+
+.header-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.btn-refresh {
+  padding: 0.45rem 0.85rem;
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--accent);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(56, 189, 248, 0.2);
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  fa-icon {
+    margin-right: 0.3rem;
+  }
+}
+
+.btn-mark-all {
+  padding: 0.45rem 0.85rem;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  color: var(--success);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: rgba(34, 197, 94, 0.2);
+  }
+  fa-icon {
+    margin-right: 0.3rem;
+  }
+}
+
+// Filter bar
+.filter-bar {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.4rem 0.85rem;
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: var(--border-color);
+    color: var(--text-secondary);
+  }
+
+  &.active {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: var(--accent);
+    font-weight: 600;
+  }
+}
+
+.filter-count {
+  display: inline-block;
+  background: var(--border-light);
+  color: inherit;
+  padding: 0 0.35rem;
+  border-radius: 8px;
+  font-size: 0.7rem;
+  margin-left: 0.3rem;
+  font-weight: 700;
+
+  .active & {
+    background: rgba(56, 189, 248, 0.25);
+  }
+}
+
+// Empty
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+
+  .empty-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 0.75rem;
+  }
+
+  p {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+}
+
+// Notification cards
+.notif-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.notif-card {
+  display: flex;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #1a2a3c;
+    border-color: var(--border-color);
+  }
+
+  &.unread {
+    background: rgba(56, 189, 248, 0.04);
+    border-left: 3px solid var(--accent);
+
+    .notif-card-title {
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+  }
+}
+
+.notif-card-icon {
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.type-icon {
+  font-size: 1.5rem;
+  display: block;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+
+  &.type-THRESHOLD_ALERT {
+    background: rgba(239, 68, 68, 0.1);
+  }
+
+  &.type-ANOMALY_DETECTED {
+    background: rgba(168, 85, 247, 0.1);
+  }
+
+  &.type-APPOINTMENT_REMINDER {
+    background: rgba(56, 189, 248, 0.1);
+  }
+}
+
+.notif-card-body {
+  flex: 1;
+  min-width: 0;
+}
+
+.notif-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.3rem;
+}
+
+.notif-type-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.12rem 0.5rem;
+  border-radius: 4px;
+
+  &.label-THRESHOLD_ALERT {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--danger);
+  }
+
+  &.label-ANOMALY_DETECTED {
+    background: rgba(168, 85, 247, 0.12);
+    color: #c084fc;
+  }
+
+  &.label-APPOINTMENT_REMINDER {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+  }
+
+  &.label-GENERAL {
+    background: var(--border-color);
+    color: var(--text-muted);
+  }
+}
+
+.notif-time {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.notif-card-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 0.25rem;
+  line-height: 1.3;
+}
+
+.notif-card-message {
+  font-size: 0.82rem;
+  color: var(--text-dim);
+  margin: 0 0 0.35rem;
+  line-height: 1.4;
+  white-space: pre-line;
+  max-height: 4.2em;
+  overflow: hidden;
+}
+
+.notif-patient {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-weight: 500;
+}
+
+.notif-card-actions {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  padding-top: 0.25rem;
+}
+
+.unread-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: block;
+  animation: pulse-dot 2s infinite;
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+// Responsive
+@media (max-width: 600px) {
+  .notif-page {
+    padding: 1rem;
+  }
+
+  .notif-card {
+    padding: 0.85rem;
+  }
+
+  .filter-bar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+}

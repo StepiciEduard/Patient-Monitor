@@ -1,0 +1,47 @@
+{
+  "annotations": {
+    "changelogDate": "20260220132755"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "role",
+      "fieldType": "ChatRole",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "USER,ASSISTANT"
+    },
+    {
+      "fieldName": "content",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "createdAt",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "contextStartDate",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "contextEndDate",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "name": "ChatMessage",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "patient",
+      "relationshipName": "patient",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,86 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (patient(); as patientRef) {
+      <div>
+        <h2 data-cy="patientDetailsHeading"><span jhiTranslate="patientMonitorApp.patient.detail.title">Patient</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ patientRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.cnp">Cnp</span></dt>
+          <dd>
+            <span>{{ patientRef.cnp }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.phoneNumber">Phone Number</span></dt>
+          <dd>
+            <span>{{ patientRef.phoneNumber }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.address">Address</span></dt>
+          <dd>
+            <span>{{ patientRef.address }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.patientType">Patient Type</span></dt>
+          <dd>
+            <span [jhiTranslate]="'patientMonitorApp.PatientType.' + (patientRef.patientType ?? 'null')">{{
+              { null: '', CARDIAC: 'CARDIAC', DIABETES: 'DIABETES', RESPIRATORY: 'RESPIRATORY' }[patientRef.patientType ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.patientSubtype">Patient Subtype</span></dt>
+          <dd>
+            <span [jhiTranslate]="'patientMonitorApp.PatientSubtype.' + (patientRef.patientSubtype ?? 'null')">{{
+              { null: '', STABLE: 'STABLE', BORDERLINE: 'BORDERLINE', CRITICAL: 'CRITICAL' }[patientRef.patientSubtype ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.dateOfBirth">Date Of Birth</span></dt>
+          <dd>
+            <span>{{ patientRef.dateOfBirth | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.gender">Gender</span></dt>
+          <dd>
+            <span>{{ patientRef.gender }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.hba1c">Hba 1 C</span></dt>
+          <dd>
+            <span>{{ patientRef.hba1c }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.bmi">Bmi</span></dt>
+          <dd>
+            <span>{{ patientRef.bmi }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.fev1Baseline">Fev 1 Baseline</span></dt>
+          <dd>
+            <span>{{ patientRef.fev1Baseline }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.user">User</span></dt>
+          <dd>
+            <span>{{ patientRef.user?.login }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.patient.doctor">Doctor</span></dt>
+          <dd>
+            @if (patient()!.doctor) {
+              <div>
+                <a [routerLink]="['/doctor', patient()!.doctor?.id, 'view']">{{ patientRef.doctor?.specialization }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/patient', patientRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

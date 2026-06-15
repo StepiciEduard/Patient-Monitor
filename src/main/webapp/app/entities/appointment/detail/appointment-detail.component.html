@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (appointment(); as appointmentRef) {
+      <div>
+        <h2 data-cy="appointmentDetailsHeading"><span jhiTranslate="patientMonitorApp.appointment.detail.title">Appointment</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ appointmentRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.status">Status</span></dt>
+          <dd>
+            <span [jhiTranslate]="'patientMonitorApp.AppointmentStatus.' + (appointmentRef.status ?? 'null')">{{
+              { null: '', SCHEDULED: 'SCHEDULED', COMPLETED: 'COMPLETED', CANCELLED: 'CANCELLED' }[appointmentRef.status ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.notes">Notes</span></dt>
+          <dd>
+            <span>{{ appointmentRef.notes }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ appointmentRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.slot">Slot</span></dt>
+          <dd>
+            @if (appointment()!.slot) {
+              <div>
+                <a [routerLink]="['/appointment-slot', appointment()!.slot?.id, 'view']">{{ appointmentRef.slot?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.patient">Patient</span></dt>
+          <dd>
+            @if (appointment()!.patient) {
+              <div>
+                <a [routerLink]="['/patient', appointment()!.patient?.id, 'view']">{{ appointmentRef.patient?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.appointment.doctor">Doctor</span></dt>
+          <dd>
+            @if (appointment()!.doctor) {
+              <div>
+                <a [routerLink]="['/doctor', appointment()!.doctor?.id, 'view']">{{ appointmentRef.doctor?.specialization }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/appointment', appointmentRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

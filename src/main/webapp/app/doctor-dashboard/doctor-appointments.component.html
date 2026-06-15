@@ -1,0 +1,162 @@
+<div class="appointments-page">
+  <!-- Header -->
+  <div class="page-header">
+    <h2>Programari</h2>
+    <button class="btn-create-slot" (click)="openCreateModal()">+ Adauga slot</button>
+  </div>
+
+  <!-- Calendar Navigation -->
+  <div class="calendar-nav">
+    <button class="nav-btn" (click)="prevMonth()">&larr;</button>
+    <span class="month-label">{{ currentMonthLabel }}</span>
+    <button class="nav-btn" (click)="nextMonth()">&rarr;</button>
+  </div>
+
+  <!-- Calendar Grid -->
+  <div class="calendar-grid">
+    <!-- Week day headers -->
+    @for (day of weekDays; track day) {
+      <div class="calendar-header-cell">{{ day }}</div>
+    }
+
+    <!-- Day cells -->
+    @for (day of calendarDays; track day.date.getTime()) {
+      <div
+        class="calendar-day"
+        [class.other-month]="!day.isCurrentMonth"
+        [class.today]="day.isToday"
+        [class.selected]="selectedDay?.date?.getTime() === day.date.getTime()"
+        [class.has-slots]="day.slots.length > 0"
+        (click)="selectDay(day)"
+      >
+        <span class="day-number">{{ day.date.getDate() }}</span>
+        @if (day.slots.length > 0 && day.isCurrentMonth) {
+          <div class="day-indicators">
+            <span class="slot-count" [class.has-booked]="getDayBookedCount(day) > 0">
+              {{ day.slots.length }}
+            </span>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <!-- Selected Day Detail -->
+  @if (selectedDay) {
+    <div class="day-detail">
+      <div class="day-detail-header">
+        <h3>{{ selectedDay.date.toLocaleDateString('ro-RO', { weekday: 'long', day: 'numeric', month: 'long' }) }}</h3>
+        <button class="btn-add-day" (click)="openCreateModal(selectedDay)">+ Slot nou</button>
+      </div>
+
+      @if (selectedDay.slots.length === 0) {
+        <div class="no-slots">Nu ai sloturi in aceasta zi. Adauga unul!</div>
+      } @else {
+        <div class="slots-list">
+          @for (slot of selectedDay.slots; track slot.id) {
+            <div
+              class="slot-card"
+              [class.available]="slot.isAvailable"
+              [class.booked]="!slot.isAvailable && slot.appointment"
+              [class.past]="isPast(slot.endTime)"
+              [class.completed]="slot.appointment?.status === 'COMPLETED'"
+              (click)="openSlotDetail(slot)"
+            >
+              <div class="slot-time">{{ formatTime(slot.startTime) }} - {{ formatTime(slot.endTime) }}</div>
+              <div class="slot-status">
+                @if (slot.appointment) {
+                  @if (slot.appointment.status === 'COMPLETED') {
+                    <span class="status-tag completed">Finalizat</span>
+                  } @else {
+                    <span class="status-tag booked">Rezervat</span>
+                  }
+                  <span class="slot-patient">{{ slot.appointment.patientName }}</span>
+                } @else if (isPast(slot.endTime)) {
+                  <span class="status-tag past">Expirat</span>
+                } @else {
+                  <span class="status-tag available">Disponibil</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Create Slot Modal -->
+  @if (showCreateModal) {
+    <div class="modal-overlay" (click)="closeCreateModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Adauga slot programare</h3>
+
+        @if (createSuccess) {
+          <div class="modal-success">{{ createSuccess }}</div>
+        } @else {
+          <div class="modal-form">
+            @if (createError) {
+              <div class="modal-error">{{ createError }}</div>
+            }
+
+            <label>Data</label>
+            <input type="date" class="form-input" [(ngModel)]="newSlotDate" />
+
+            <label>Ora inceput</label>
+            <input type="time" class="form-input" [(ngModel)]="newSlotStartTime" />
+
+            <label>Ora sfarsit</label>
+            <input type="time" class="form-input" [(ngModel)]="newSlotEndTime" />
+
+            <div class="modal-actions">
+              <button class="btn-cancel" (click)="closeCreateModal()">Anuleaza</button>
+              <button class="btn-save" (click)="createSlot()">Creeaza slot</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+
+  <!-- Slot Detail Modal -->
+  @if (showDetailModal && detailSlot) {
+    <div class="modal-overlay" (click)="closeDetailModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Detalii slot</h3>
+        <div class="detail-info">
+          <p><strong>Data:</strong> {{ formatDate(detailSlot.startTime) }}</p>
+          <p><strong>Ora:</strong> {{ formatTime(detailSlot.startTime) }} - {{ formatTime(detailSlot.endTime) }}</p>
+          <p>
+            <strong>Status:</strong>
+            @if (detailSlot.appointment) {
+              @if (detailSlot.appointment.status === 'COMPLETED') {
+                <span class="status-tag completed">Finalizat</span>
+              } @else {
+                <span class="status-tag booked">Rezervat</span>
+              }
+            } @else {
+              <span class="status-tag available">Disponibil</span>
+            }
+          </p>
+
+          @if (detailSlot.appointment) {
+            <p><strong>Pacient:</strong> {{ detailSlot.appointment.patientName }}</p>
+            @if (detailSlot.appointment.notes) {
+              <p><strong>Note:</strong> {{ detailSlot.appointment.notes }}</p>
+            }
+          }
+        </div>
+
+        <div class="modal-actions">
+          @if (detailSlot.appointment && detailSlot.appointment.status === 'SCHEDULED') {
+            <button class="btn-complete" (click)="completeAppointment(detailSlot.appointment.id)">Finalizeaza</button>
+            <button class="btn-cancel-appt" (click)="cancelAppointment(detailSlot.appointment.id)">Anuleaza programarea</button>
+          }
+          @if (!detailSlot.appointment || detailSlot.appointment.status !== 'SCHEDULED') {
+            <button class="btn-delete" (click)="deleteSlot(detailSlot.id)">Sterge slot</button>
+          }
+          <button class="btn-cancel" (click)="closeDetailModal()">Inchide</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

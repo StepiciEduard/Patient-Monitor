@@ -1,0 +1,159 @@
+<div class="entity-page">
+  <div class="entity-header">
+    <h2>🏥 Pacienti</h2>
+    <div class="header-actions">
+      <button class="btn-refresh" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        Actualizeaza
+      </button>
+    </div>
+  </div>
+
+  <jhi-alert-error />
+  <jhi-alert />
+
+  <!-- Filter -->
+  <div class="filter-row">
+    <label>Filtru doctor:</label>
+    <select class="filter-select" (change)="onDoctorFilterChange($event)">
+      <option value="all">Toti doctorii</option>
+      @for (doc of doctorsList; track doc.id) {
+        <option [value]="doc.id">Dr. {{ doc.lastName }} {{ doc.firstName }} - {{ doc.specialization }}</option>
+      }
+    </select>
+  </div>
+
+  @if (adminPatients.length === 0 && !isLoading) {
+    <div class="empty-state">
+      <span class="empty-icon">🏥</span>
+      <p>Nu au fost gasiti pacienti.</p>
+    </div>
+  } @else {
+    <div class="table-wrapper">
+      <table class="entity-table">
+        <thead>
+          <tr>
+            <th>Nume</th>
+            <th>Username</th>
+            <th>CNP</th>
+            <th>Tip</th>
+            <th>Subtip</th>
+            <th>Doctor</th>
+            <th>Anomalii 24h</th>
+            <th>Status</th>
+            <th>Actiuni</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (patient of adminPatients; track patient.id) {
+            <tr>
+              <td class="name-cell">{{ patient.lastName }} {{ patient.firstName }}</td>
+              <td>
+                <code class="username-code">{{ patient.login }}</code>
+              </td>
+              <td>{{ patient.cnp }}</td>
+              <td>
+                <span class="type-badge" [class]="'type-' + patient.patientType.toLowerCase()">
+                  {{ patient.patientType }}
+                </span>
+              </td>
+              <td>{{ patient.patientSubtype }}</td>
+              <td>{{ patient.doctorName }}</td>
+              <td>
+                @if (patient.anomalies24h > 0) {
+                  <span class="anomaly-badge">{{ patient.anomalies24h }}</span>
+                } @else {
+                  <span class="no-anomaly">0</span>
+                }
+              </td>
+              <td>
+                <span class="status-dot" [class.active]="patient.activated" [class.inactive]="!patient.activated">
+                  {{ patient.activated ? 'Activ' : 'Inactiv' }}
+                </span>
+              </td>
+              <td>
+                <div class="action-buttons">
+                  <a [routerLink]="['/patient', patient.id, 'view']" class="btn-action btn-view" title="Vizualizeaza">
+                    <fa-icon icon="eye"></fa-icon>
+                  </a>
+                  <a [routerLink]="['/patient', patient.id, 'edit']" class="btn-action btn-edit" title="Editeaza">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                  </a>
+                  <button class="btn-action btn-reassign" (click)="openReassign(patient)" title="Reasociaza doctor">🔄</button>
+                  <button
+                    class="btn-action btn-toggle"
+                    (click)="toggleActivation(patient)"
+                    [title]="patient.activated ? 'Dezactiveaza' : 'Activeaza'"
+                  >
+                    {{ patient.activated ? '🔒' : '🔓' }}
+                  </button>
+                  <button class="btn-action btn-reset" (click)="openResetPassword(patient)" title="Reseteaza parola">🔑</button>
+                  <button class="btn-action btn-delete" (click)="confirmDelete(patient)" title="Sterge">🗑️</button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+
+  <!-- Reassign Modal -->
+  @if (showReassignModal && reassignTarget) {
+    <div class="modal-overlay" (click)="closeReassignModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Reasociaza pacient</h3>
+        <p class="modal-subtitle">{{ reassignTarget.lastName }} {{ reassignTarget.firstName }} ({{ reassignTarget.doctorName }})</p>
+        <div class="modal-form">
+          <label>Doctor nou:</label>
+          <select class="form-input" [(ngModel)]="reassignDoctorId">
+            <option [ngValue]="null" disabled>-- Alege --</option>
+            @for (doc of doctorsList; track doc.id) {
+              <option [ngValue]="doc.id">Dr. {{ doc.lastName }} {{ doc.firstName }} - {{ doc.specialization }}</option>
+            }
+          </select>
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeReassignModal()">Anuleaza</button>
+            <button class="btn-send" (click)="submitReassign()" [disabled]="!reassignDoctorId">Reasociaza</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Reset Password Modal -->
+  @if (showResetModal && resetTarget) {
+    <div class="modal-overlay" (click)="closeResetModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Reseteaza parola</h3>
+        <p class="modal-subtitle">Pentru: {{ resetTarget.login }}</p>
+        <div class="modal-form">
+          <label>Parola noua:</label>
+          <input type="password" class="form-input" [(ngModel)]="newPassword" placeholder="Minim 4 caractere" />
+          <div class="modal-actions">
+            <button class="btn-cancel" (click)="closeResetModal()">Anuleaza</button>
+            <button class="btn-send" (click)="submitResetPassword()" [disabled]="newPassword.length < 4">Reseteaza</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- Delete Confirm Modal -->
+  @if (showDeleteModal && deleteTarget) {
+    <div class="modal-overlay" (click)="closeDeleteModal()">
+      <div class="modal-card" (click)="$event.stopPropagation()">
+        <h3>Confirma stergerea</h3>
+        <p class="modal-subtitle delete-warning">
+          Esti sigur ca vrei sa stergi pacientul <strong>{{ deleteTarget.lastName }} {{ deleteTarget.firstName }}</strong> ({{
+            deleteTarget.login
+          }})? Aceasta actiune este ireversibila!
+        </p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="closeDeleteModal()">Anuleaza</button>
+          <button class="btn-delete-confirm" (click)="executeDelete()">Sterge definitiv</button>
+        </div>
+      </div>
+    </div>
+  }
+</div>

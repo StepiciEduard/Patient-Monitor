@@ -1,0 +1,10 @@
+{
+  "patientMonitorApp": {
+    "PatientType": {
+      "null": "",
+      "CARDIAC": "CARDIAC",
+      "DIABETES": "DIABETES",
+      "RESPIRATORY": "RESPIRATORY"
+    }
+  }
+}

@@ -2,14 +2,21 @@ package itee.licenta.monitorizare.service;
 
 import itee.licenta.monitorizare.config.Constants;
 import itee.licenta.monitorizare.domain.Authority;
+import itee.licenta.monitorizare.domain.Doctor;
+import itee.licenta.monitorizare.domain.Patient;
 import itee.licenta.monitorizare.domain.User;
+import itee.licenta.monitorizare.domain.enumeration.PatientSubtype;
+import itee.licenta.monitorizare.domain.enumeration.PatientType;
 import itee.licenta.monitorizare.repository.AuthorityRepository;
+import itee.licenta.monitorizare.repository.DoctorRepository;
+import itee.licenta.monitorizare.repository.PatientRepository;
 import itee.licenta.monitorizare.repository.UserRepository;
 import itee.licenta.monitorizare.security.AuthoritiesConstants;
 import itee.licenta.monitorizare.security.SecurityUtils;
 import itee.licenta.monitorizare.service.dto.AdminUserDTO;
 import itee.licenta.monitorizare.service.dto.UserDTO;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -39,17 +46,25 @@ public class UserService {
 
     private final AuthorityRepository authorityRepository;
 
+    private final DoctorRepository doctorRepository;
+
+    private final PatientRepository patientRepository;
+
     private final CacheManager cacheManager;
 
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
+        DoctorRepository doctorRepository,
+        PatientRepository patientRepository,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.doctorRepository = doctorRepository;
+        this.patientRepository = patientRepository;
         this.cacheManager = cacheManager;
     }
 
@@ -58,7 +73,6 @@ public class UserService {
         return userRepository
             .findOneByActivationKey(key)
             .map(user -> {
-                // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
@@ -94,6 +108,18 @@ public class UserService {
     }
 
     public User registerUser(AdminUserDTO userDTO, String password) {
+        return registerUser(userDTO, password, null, null, null, null, null);
+    }
+
+    public User registerUser(
+        AdminUserDTO userDTO,
+        String password,
+        Long doctorId,
+        String cnp,
+        String dateOfBirth,
+        String gender,
+        String phoneNumber
+    ) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(existingUser -> {
@@ -113,7 +139,6 @@ public class UserService {
         User newUser = new User();
         String encryptedPassword = passwordEncoder.encode(password);
         newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
         newUser.setFirstName(userDTO.getFirstName());
         newUser.setLastName(userDTO.getLastName());
@@ -122,15 +147,67 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
         newUser.setActivated(false);
-        // new user gets registration key
         newUser.setActivationKey(RandomUtil.generateActivationKey());
+
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
+
+        // If doctorId is provided, this is a patient registration
+        if (doctorId != null) {
+            authorityRepository.findById(AuthoritiesConstants.PATIENT).ifPresent(authorities::add);
+        }
+
         newUser.setAuthorities(authorities);
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
+
+        // Create Patient entity if doctorId is provided
+        if (doctorId != null) {
+            Optional<Doctor> doctorOpt = doctorRepository.findById(doctorId);
+            if (doctorOpt.isPresent()) {
+                Doctor doctor = doctorOpt.get();
+                Patient patient = new Patient();
+                patient.setUser(newUser);
+                patient.setDoctor(doctor);
+                patient.setPatientSubtype(PatientSubtype.STABLE);
+
+                // Set personal data
+                if (cnp != null && !cnp.isEmpty()) {
+                    patient.setCnp(cnp);
+                }
+                if (dateOfBirth != null && !dateOfBirth.isEmpty()) {
+                    patient.setDateOfBirth(LocalDate.parse(dateOfBirth));
+                }
+                if (gender != null && !gender.isEmpty()) {
+                    patient.setGender(gender);
+                }
+                if (phoneNumber != null && !phoneNumber.isEmpty()) {
+                    patient.setPhoneNumber(phoneNumber);
+                }
+
+                // Determine PatientType from doctor's specialization
+                String spec = doctor.getSpecialization().toLowerCase();
+                if (spec.contains("cardio")) {
+                    patient.setPatientType(PatientType.CARDIAC);
+                } else if (spec.contains("diabet") || spec.contains("endocrin")) {
+                    patient.setPatientType(PatientType.DIABETES);
+                } else if (spec.contains("pneumo") || spec.contains("pulmo") || spec.contains("respir")) {
+                    patient.setPatientType(PatientType.RESPIRATORY);
+                } else {
+                    patient.setPatientType(PatientType.CARDIAC); // default
+                }
+
+                patientRepository.save(patient);
+                LOG.debug(
+                    "Created Patient entity for user {} with doctor {} (type: {})",
+                    newUser.getLogin(),
+                    doctor.getId(),
+                    patient.getPatientType()
+                );
+            }
+        }
+
         LOG.debug("Created Information for User: {}", newUser);
         return newUser;
     }
@@ -155,7 +232,7 @@ public class UserService {
         }
         user.setImageUrl(userDTO.getImageUrl());
         if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
+            user.setLangKey(Constants.DEFAULT_LANGUAGE);
         } else {
             user.setLangKey(userDTO.getLangKey());
         }
@@ -180,12 +257,6 @@ public class UserService {
         return user;
     }
 
-    /**
-     * Update all information for a specific user, and return the modified user.
-     *
-     * @param userDTO user to update.
-     * @return updated user.
-     */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
         return Optional.of(userRepository.findById(userDTO.getId()))
             .filter(Optional::isPresent)
@@ -228,15 +299,6 @@ public class UserService {
             });
     }
 
-    /**
-     * Update basic information (first name, last name, email, language) for the current user.
-     *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
-     */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
@@ -290,11 +352,6 @@ public class UserService {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
     }
 
-    /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired every day, at 01:00 (am).
-     */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
@@ -306,10 +363,6 @@ public class UserService {
             });
     }
 
-    /**
-     * Gets a list of all the authorities.
-     * @return a list of all the authorities.
-     */
     @Transactional(readOnly = true)
     public List<String> getAuthorities() {
         return authorityRepository.findAll().stream().map(Authority::getName).toList();

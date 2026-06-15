@@ -1,0 +1,98 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (medicalData(); as medicalDataRef) {
+      <div>
+        <h2 data-cy="medicalDataDetailsHeading"><span jhiTranslate="patientMonitorApp.medicalData.detail.title">Medical Data</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.timestamp">Timestamp</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.timestamp | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.heartRate">Heart Rate</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.heartRate }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.spo2">Spo 2</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.spo2 }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.temperature">Temperature</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.temperature }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.systolicBp">Systolic Bp</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.systolicBp }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.diastolicBp">Diastolic Bp</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.diastolicBp }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.hrv">Hrv</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.hrv }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.qtInterval">Qt Interval</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.qtInterval }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.bnp">Bnp</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.bnp }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.bloodGlucose">Blood Glucose</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.bloodGlucose }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.respiratoryRate">Respiratory Rate</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.respiratoryRate }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.fev1">Fev 1</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.fev1 }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.etco2">Etco 2</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.etco2 }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.anomalyScore">Anomaly Score</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.anomalyScore }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.isAnomaly">Is Anomaly</span></dt>
+          <dd>
+            <span>{{ medicalDataRef.isAnomaly }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.medicalData.patient">Patient</span></dt>
+          <dd>
+            @if (medicalData()!.patient) {
+              <div>
+                <a [routerLink]="['/patient', medicalData()!.patient?.id, 'view']">{{ medicalDataRef.patient?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/medical-data', medicalDataRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -50,6 +50,13 @@ public class CacheConfiguration {
             createCache(cm, itee.licenta.monitorizare.domain.User.class.getName());
             createCache(cm, itee.licenta.monitorizare.domain.Authority.class.getName());
             createCache(cm, itee.licenta.monitorizare.domain.User.class.getName() + ".authorities");
+            createCache(cm, itee.licenta.monitorizare.domain.Doctor.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.Patient.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.MedicalData.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.Notification.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.AppointmentSlot.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.Appointment.class.getName());
+            createCache(cm, itee.licenta.monitorizare.domain.ChatMessage.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

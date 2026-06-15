@@ -1,0 +1,72 @@
+<div class="notif-page">
+  <div class="notif-header">
+    <h2>Notificari</h2>
+    <div class="header-actions">
+      @if (unreadCount > 0) {
+        <button class="btn-mark-all" (click)="markAllRead()">
+          <fa-icon icon="check-double"></fa-icon>
+          Marcheaza toate ca citite ({{ unreadCount }})
+        </button>
+      }
+      <button class="btn-refresh" (click)="loadNotifications()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        Actualizeaza
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filter-bar">
+    <button class="filter-btn" [class.active]="activeFilter === 'ALL'" (click)="setFilter('ALL')">
+      Toate
+      <span class="filter-count">{{ allNotifications.length }}</span>
+    </button>
+    <button class="filter-btn" [class.active]="activeFilter === 'UNREAD'" (click)="setFilter('UNREAD')">
+      Necitite
+      <span class="filter-count">{{ unreadCount }}</span>
+    </button>
+    <button class="filter-btn" [class.active]="activeFilter === 'THRESHOLD_ALERT'" (click)="setFilter('THRESHOLD_ALERT')">
+      Alerte Prag
+    </button>
+    <button class="filter-btn" [class.active]="activeFilter === 'ANOMALY_DETECTED'" (click)="setFilter('ANOMALY_DETECTED')">
+      Anomalii
+    </button>
+    <button class="filter-btn" [class.active]="activeFilter === 'APPOINTMENT_REMINDER'" (click)="setFilter('APPOINTMENT_REMINDER')">
+      Programari
+    </button>
+  </div>
+
+  <!-- Notification list -->
+  @if (filteredNotifications.length === 0) {
+    <div class="empty-state">
+      <span class="empty-icon">🔔</span>
+      <p>Nu ai notificari{{ activeFilter !== 'ALL' ? ' in aceasta categorie' : '' }}.</p>
+    </div>
+  } @else {
+    <div class="notif-list">
+      @for (notif of filteredNotifications; track notif.id) {
+        <div class="notif-card" [class.unread]="!notif.isRead" (click)="markAsRead(notif)">
+          <div class="notif-card-icon">
+            <span class="type-icon" [class]="'type-' + notif.type">{{ getIcon(notif.type) }}</span>
+          </div>
+          <div class="notif-card-body">
+            <div class="notif-card-top">
+              <span class="notif-type-label" [class]="'label-' + notif.type">{{ getTypeLabel(notif.type) }}</span>
+              <span class="notif-time">{{ getTimeAgo(notif.createdAt) }}</span>
+            </div>
+            <h4 class="notif-card-title">{{ notif.title }}</h4>
+            <p class="notif-card-message">{{ notif.message }}</p>
+            @if (notif.patientName) {
+              <span class="notif-patient">Pacient: {{ notif.patientName }}</span>
+            }
+          </div>
+          <div class="notif-card-actions">
+            @if (!notif.isRead) {
+              <span class="unread-dot" title="Necitita"></span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

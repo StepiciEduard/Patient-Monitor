@@ -1,0 +1,39 @@
+{
+  "patientMonitorApp": {
+    "medicalData": {
+      "home": {
+        "title": "Medical Data",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Medical Data",
+        "createOrEditLabel": "Create or edit a Medical Data",
+        "notFound": "No Medical Data found"
+      },
+      "created": "A new Medical Data is created with identifier {{ param }}",
+      "updated": "A Medical Data is updated with identifier {{ param }}",
+      "deleted": "A Medical Data is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Medical Data {{ id }}?"
+      },
+      "detail": {
+        "title": "Medical Data"
+      },
+      "id": "ID",
+      "timestamp": "Timestamp",
+      "heartRate": "Heart Rate",
+      "spo2": "Spo 2",
+      "temperature": "Temperature",
+      "systolicBp": "Systolic Bp",
+      "diastolicBp": "Diastolic Bp",
+      "hrv": "Hrv",
+      "qtInterval": "Qt Interval",
+      "bnp": "Bnp",
+      "bloodGlucose": "Blood Glucose",
+      "respiratoryRate": "Respiratory Rate",
+      "fev1": "Fev 1",
+      "etco2": "Etco 2",
+      "anomalyScore": "Anomaly Score",
+      "isAnomaly": "Is Anomaly",
+      "patient": "Patient"
+    }
+  }
+}

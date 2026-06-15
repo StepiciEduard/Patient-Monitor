@@ -1,0 +1,209 @@
+<div>
+  <h2 id="page-heading" data-cy="MedicalDataHeading">
+    <span jhiTranslate="patientMonitorApp.medicalData.home.title">Medical Data</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="patientMonitorApp.medicalData.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-medical-data"
+        [routerLink]="['/medical-data/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="patientMonitorApp.medicalData.home.createLabel">Create a new Medical Data</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (medicalData().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="patientMonitorApp.medicalData.home.notFound">No Medical Data found</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="timestamp">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.timestamp">Timestamp</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="heartRate">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.heartRate">Heart Rate</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="spo2">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.spo2">Spo 2</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="temperature">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.temperature">Temperature</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="systolicBp">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.systolicBp">Systolic Bp</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="diastolicBp">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.diastolicBp">Diastolic Bp</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="hrv">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.hrv">Hrv</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qtInterval">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.qtInterval">Qt Interval</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bnp">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.bnp">Bnp</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bloodGlucose">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.bloodGlucose">Blood Glucose</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="respiratoryRate">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.respiratoryRate">Respiratory Rate</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fev1">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.fev1">Fev 1</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="etco2">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.etco2">Etco 2</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="anomalyScore">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.anomalyScore">Anomaly Score</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="isAnomaly">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.isAnomaly">Is Anomaly</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="patient.id">
+              <div class="d-flex">
+                <span jhiTranslate="patientMonitorApp.medicalData.patient">Patient</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody infinite-scroll (scrolled)="loadNextPage()" [infiniteScrollDisabled]="!hasMorePage()" [infiniteScrollDistance]="0">
+          @for (medicalData of medicalData(); track trackId(medicalData)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/medical-data', medicalData.id, 'view']">{{ medicalData.id }}</a>
+              </td>
+              <td>{{ medicalData.timestamp | formatMediumDatetime }}</td>
+              <td>{{ medicalData.heartRate }}</td>
+              <td>{{ medicalData.spo2 }}</td>
+              <td>{{ medicalData.temperature }}</td>
+              <td>{{ medicalData.systolicBp }}</td>
+              <td>{{ medicalData.diastolicBp }}</td>
+              <td>{{ medicalData.hrv }}</td>
+              <td>{{ medicalData.qtInterval }}</td>
+              <td>{{ medicalData.bnp }}</td>
+              <td>{{ medicalData.bloodGlucose }}</td>
+              <td>{{ medicalData.respiratoryRate }}</td>
+              <td>{{ medicalData.fev1 }}</td>
+              <td>{{ medicalData.etco2 }}</td>
+              <td>{{ medicalData.anomalyScore }}</td>
+              <td>{{ medicalData.isAnomaly }}</td>
+              <td>
+                @if (medicalData.patient) {
+                  <div>
+                    <a [routerLink]="['/patient', medicalData.patient.id, 'view']">{{ medicalData.patient.id }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/medical-data', medicalData.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/medical-data', medicalData.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(medicalData)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

@@ -1,23 +1,188 @@
-/* ==========================================================================
-Main page styles
-========================================================================== */
-
-.hipster {
-  display: inline-block;
-  width: 347px;
-  height: 497px;
-  background: url('../../content/images/jhipster_family_member_3.svg') no-repeat center top;
-  background-size: contain;
+.home-container {
+  min-height: calc(100vh - 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
 }
 
-/* wait autoprefixer update to allow simple generation of high pixel density media query */
-@media only screen and (-webkit-min-device-pixel-ratio: 2),
-  only screen and (-moz-min-device-pixel-ratio: 2),
-  only screen and (-o-min-device-pixel-ratio: 2/1),
-  only screen and (min-resolution: 192dpi),
-  only screen and (min-resolution: 2dppx) {
-  .hipster {
-    background: url('../../content/images/jhipster_family_member_3.svg') no-repeat center top;
-    background-size: contain;
+.home-content {
+  max-width: 800px;
+  width: 100%;
+}
+
+.home-hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+
+  .hero-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
+    margin-bottom: 0.5rem;
+
+    .hero-icon {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  .hero-subtitle {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+  }
+}
+
+// Welcome card (logged in)
+.welcome-card {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(34, 197, 94, 0.08);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 2rem;
+
+  .welcome-icon {
+    font-size: 2rem;
+  }
+
+  h3 {
+    color: var(--success);
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin: 0;
+  }
+}
+
+// Quick actions
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 1.5rem 1rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.25s;
+  cursor: pointer;
+
+  &:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+    background: var(--bg-tertiary);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    text-decoration: none;
+  }
+
+  .action-icon {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .action-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .action-desc {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+}
+
+// Auth cards (logged out)
+.auth-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.auth-card {
+  text-align: center;
+  padding: 2rem 1.5rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+
+  .auth-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  p {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.5;
+  }
+}
+
+.auth-btn {
+  display: inline-block;
+  padding: 0.6rem 1.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &.primary {
+    background: var(--accent);
+    color: var(--bg-primary);
+
+    &:hover {
+      background: var(--accent-light);
+      text-decoration: none;
+    }
+  }
+
+  &.secondary {
+    background: var(--border-color);
+    border: 1px solid var(--border-light);
+    color: var(--text-secondary);
+
+    &:hover {
+      background: var(--border-light);
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+  }
+}
+
+// Responsive
+@media (max-width: 640px) {
+  .auth-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .home-hero .hero-title {
+    font-size: 1.8rem;
   }
 }

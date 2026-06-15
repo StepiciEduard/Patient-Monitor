@@ -1,0 +1,27 @@
+{
+  "patientMonitorApp": {
+    "doctor": {
+      "home": {
+        "title": "Doctors",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Doctor",
+        "createOrEditLabel": "Creeare sau editare Doctor",
+        "notFound": "No Doctors found"
+      },
+      "created": "A fost creată o nouă entitate Doctor cu identificatorul {{ param }}",
+      "updated": "Doctor cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Doctor cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Doctor {{ id }}?"
+      },
+      "detail": {
+        "title": "Doctor"
+      },
+      "id": "ID",
+      "specialization": "Specialization",
+      "phone": "Phone",
+      "officeLocation": "Office Location",
+      "user": "User"
+    }
+  }
+}

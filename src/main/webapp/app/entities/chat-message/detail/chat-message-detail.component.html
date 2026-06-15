@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (chatMessage(); as chatMessageRef) {
+      <div>
+        <h2 data-cy="chatMessageDetailsHeading"><span jhiTranslate="patientMonitorApp.chatMessage.detail.title">Chat Message</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ chatMessageRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.role">Role</span></dt>
+          <dd>
+            <span [jhiTranslate]="'patientMonitorApp.ChatRole.' + (chatMessageRef.role ?? 'null')">{{
+              { null: '', USER: 'USER', ASSISTANT: 'ASSISTANT' }[chatMessageRef.role ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.content">Content</span></dt>
+          <dd>
+            <span>{{ chatMessageRef.content }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.createdAt">Created At</span></dt>
+          <dd>
+            <span>{{ chatMessageRef.createdAt | formatMediumDatetime }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.contextStartDate">Context Start Date</span></dt>
+          <dd>
+            <span>{{ chatMessageRef.contextStartDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.contextEndDate">Context End Date</span></dt>
+          <dd>
+            <span>{{ chatMessageRef.contextEndDate | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="patientMonitorApp.chatMessage.patient">Patient</span></dt>
+          <dd>
+            @if (chatMessage()!.patient) {
+              <div>
+                <a [routerLink]="['/patient', chatMessage()!.patient?.id, 'view']">{{ chatMessageRef.patient?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/chat-message', chatMessageRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, inject, signal, viewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, inject, signal, viewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -13,15 +13,17 @@ import { RegisterService } from './register.service';
   selector: 'jhi-register',
   imports: [SharedModule, RouterModule, FormsModule, ReactiveFormsModule, PasswordStrengthBarComponent],
   templateUrl: './register.component.html',
+  styleUrl: './register.component.scss',
 })
-export default class RegisterComponent implements AfterViewInit {
-  login = viewChild.required<ElementRef>('login');
+export default class RegisterComponent implements OnInit, AfterViewInit {
+  loginInput = viewChild<ElementRef>('loginInput');
 
   doNotMatch = signal(false);
   error = signal(false);
   errorEmailExists = signal(false);
   errorUserExists = signal(false);
   success = signal(false);
+  doctors: any[] = [];
 
   registerForm = new FormGroup({
     login: new FormControl('', {
@@ -33,9 +35,36 @@ export default class RegisterComponent implements AfterViewInit {
         Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
       ],
     }),
+    firstName: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
+    lastName: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
+    }),
     email: new FormControl('', {
       nonNullable: true,
       validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+    }),
+    doctorId: new FormControl<number | null>(null, {
+      validators: [Validators.required],
+    }),
+    cnp: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.pattern('^[0-9]{13}$')],
+    }),
+    dateOfBirth: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    gender: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
+    phoneNumber: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.pattern('^[0-9]{10}$')],
     }),
     password: new FormControl('', {
       nonNullable: true,
@@ -50,8 +79,18 @@ export default class RegisterComponent implements AfterViewInit {
   private readonly translateService = inject(TranslateService);
   private readonly registerService = inject(RegisterService);
 
+  ngOnInit(): void {
+    this.registerService.getDoctors().subscribe({
+      next: doctors => (this.doctors = doctors),
+      error: () => (this.doctors = []),
+    });
+  }
+
   ngAfterViewInit(): void {
-    this.login().nativeElement.focus();
+    const el = this.loginInput();
+    if (el) {
+      el.nativeElement.focus();
+    }
   }
 
   register(): void {
@@ -64,9 +103,21 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch.set(true);
     } else {
-      const { login, email } = this.registerForm.getRawValue();
+      const { login, firstName, lastName, email, doctorId, cnp, dateOfBirth, gender, phoneNumber } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({
+          login,
+          firstName,
+          lastName,
+          email,
+          password,
+          langKey: this.translateService.currentLang,
+          doctorId,
+          cnp,
+          dateOfBirth,
+          gender,
+          phoneNumber,
+        })
         .subscribe({ next: () => this.success.set(true), error: response => this.processError(response) });
     }
   }

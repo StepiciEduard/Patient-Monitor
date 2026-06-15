@@ -1,0 +1,436 @@
+:host {
+  display: block;
+  background: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.doctor-dashboard {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-bottom: 2rem;
+  color: var(--text-secondary);
+}
+
+// Header
+.dashboard-header {
+  background: linear-gradient(135deg, var(--bg-tertiary) 0%, var(--bg-primary) 100%);
+  border-bottom: 1px solid rgba(56, 189, 248, 0.15);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h2 {
+    font-weight: 700;
+    font-size: 1.6rem;
+    color: var(--text-primary);
+    margin: 0;
+  }
+
+  .subtitle {
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin: 0.25rem 0 0;
+  }
+}
+
+.header-stats {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.stat-card {
+  background: var(--border-color);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  min-width: 70px;
+
+  .stat-value {
+    display: block;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &.stat-stable .stat-value {
+    color: var(--success);
+  }
+  &.stat-alert .stat-value {
+    color: var(--warning);
+  }
+  &.stat-critical .stat-value {
+    color: var(--danger);
+  }
+}
+
+// Section
+.patients-section {
+  padding: 0 1.5rem;
+}
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+// Table
+.patients-table-wrapper {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  overflow-x: auto;
+}
+
+.patients-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    th {
+      background: rgba(0, 0, 0, 0.2);
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid var(--border-color);
+      transition: background 0.15s;
+
+      &:hover {
+        background: rgba(56, 189, 248, 0.04);
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 0.7rem 1rem;
+      font-size: 0.88rem;
+      white-space: nowrap;
+    }
+  }
+}
+
+.patient-name {
+  display: flex;
+  flex-direction: column;
+
+  .patient-link {
+    color: var(--text-primary);
+    font-weight: 600;
+    text-decoration: none;
+
+    &:hover {
+      color: var(--accent);
+    }
+  }
+
+  .patient-meta {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+  }
+}
+
+.text-danger {
+  color: var(--danger) !important;
+  font-weight: 600;
+}
+
+.no-data {
+  color: var(--text-faint);
+}
+
+// Badges
+.type-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  &.type-cardiac {
+    background: rgba(239, 68, 68, 0.12);
+    color: var(--danger);
+  }
+  &.type-diabetes {
+    background: rgba(234, 179, 8, 0.12);
+    color: var(--warning);
+  }
+  &.type-respiratory {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--accent);
+  }
+}
+
+.status-badge {
+  padding: 0.2rem 0.6rem;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+
+  &.status-stable {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--success);
+  }
+  &.status-alert {
+    background: rgba(234, 179, 8, 0.15);
+    color: var(--warning);
+  }
+  &.status-critical {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger);
+    animation: pulse-critical 2s ease-in-out infinite;
+  }
+  &.status-nodata {
+    background: rgba(148, 163, 184, 0.15);
+    color: var(--text-muted);
+  }
+}
+
+@keyframes pulse-critical {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+.anomaly-badge {
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--danger);
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.no-anomaly {
+  color: var(--text-faint);
+}
+
+// Action buttons
+.action-buttons {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn-view,
+.btn-notify {
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background: var(--border-color);
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  text-decoration: none;
+
+  &:hover {
+    background: rgba(56, 189, 248, 0.1);
+    border-color: rgba(56, 189, 248, 0.3);
+  }
+}
+
+// Modal
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
+
+  h3 {
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    margin: 0 0 0.25rem;
+  }
+
+  .modal-subtitle {
+    color: var(--text-dim);
+    font-size: 0.85rem;
+    margin: 0 0 1rem;
+  }
+}
+
+.modal-form {
+  label {
+    display: block;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  textarea.form-input {
+    width: 100%;
+    padding: 0.65rem;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    resize: vertical;
+
+    &:focus {
+      border-color: var(--accent);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+    }
+  }
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.btn-cancel {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1px solid var(--border-light);
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+
+  &:hover {
+    background: var(--border-color);
+  }
+}
+
+.btn-send {
+  padding: 0.5rem 1.25rem;
+  background: var(--accent);
+  color: var(--bg-primary);
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--accent-light);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.modal-success {
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: var(--success);
+  border-radius: 8px;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+// Loading & Error
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  color: var(--text-dim);
+
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(56, 189, 248, 0.2);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  p {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state {
+  margin: 2rem 1.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 10px;
+  padding: 1.25rem;
+  color: #fca5a5;
+
+  .retry-btn {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: var(--danger);
+    padding: 0.3rem 0.8rem;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 0.75rem;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .header-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

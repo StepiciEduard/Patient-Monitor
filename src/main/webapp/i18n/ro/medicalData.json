@@ -1,0 +1,39 @@
+{
+  "patientMonitorApp": {
+    "medicalData": {
+      "home": {
+        "title": "Medical Data",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Medical Data",
+        "createOrEditLabel": "Creeare sau editare Medical Data",
+        "notFound": "No Medical Data found"
+      },
+      "created": "A fost creată o nouă entitate Medical Data cu identificatorul {{ param }}",
+      "updated": "Medical Data cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Medical Data cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Medical Data {{ id }}?"
+      },
+      "detail": {
+        "title": "Medical Data"
+      },
+      "id": "ID",
+      "timestamp": "Timestamp",
+      "heartRate": "Heart Rate",
+      "spo2": "Spo 2",
+      "temperature": "Temperature",
+      "systolicBp": "Systolic Bp",
+      "diastolicBp": "Diastolic Bp",
+      "hrv": "Hrv",
+      "qtInterval": "Qt Interval",
+      "bnp": "Bnp",
+      "bloodGlucose": "Blood Glucose",
+      "respiratoryRate": "Respiratory Rate",
+      "fev1": "Fev 1",
+      "etco2": "Etco 2",
+      "anomalyScore": "Anomaly Score",
+      "isAnomaly": "Is Anomaly",
+      "patient": "Patient"
+    }
+  }
+}

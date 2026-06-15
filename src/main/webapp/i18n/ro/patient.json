@@ -1,0 +1,35 @@
+{
+  "patientMonitorApp": {
+    "patient": {
+      "home": {
+        "title": "Patients",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Patient",
+        "createOrEditLabel": "Creeare sau editare Patient",
+        "notFound": "No Patients found"
+      },
+      "created": "A fost creată o nouă entitate Patient cu identificatorul {{ param }}",
+      "updated": "Patient cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Patient cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Patient {{ id }}?"
+      },
+      "detail": {
+        "title": "Patient"
+      },
+      "id": "ID",
+      "cnp": "Cnp",
+      "phoneNumber": "Phone Number",
+      "address": "Address",
+      "patientType": "Patient Type",
+      "patientSubtype": "Patient Subtype",
+      "dateOfBirth": "Date Of Birth",
+      "gender": "Gender",
+      "hba1c": "Hba 1 C",
+      "bmi": "Bmi",
+      "fev1Baseline": "Fev 1 Baseline",
+      "user": "User",
+      "doctor": "Doctor"
+    }
+  }
+}

@@ -1,0 +1,249 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-patient-heading" data-cy="PatientCreateUpdateHeading" jhiTranslate="patientMonitorApp.patient.home.createOrEditLabel">
+        Create or edit a Patient
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="patientMonitorApp.patient.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let cnpRef = editForm.get('cnp')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_cnp" jhiTranslate="patientMonitorApp.patient.cnp">Cnp</label>
+          <input type="text" class="form-control" name="cnp" id="field_cnp" data-cy="cnp" formControlName="cnp" />
+          @if (cnpRef.invalid && (cnpRef.dirty || cnpRef.touched)) {
+            <div>
+              @if (editForm.get('cnp')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              @if (editForm.get('cnp')?.errors?.minlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: '13' }"
+                  >This field is required to be at least 13 characters.</small
+                >
+              }
+              @if (editForm.get('cnp')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '13' }"
+                  >This field cannot be longer than 13 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let phoneNumberRef = editForm.get('phoneNumber')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_phoneNumber" jhiTranslate="patientMonitorApp.patient.phoneNumber">Phone Number</label>
+          <input
+            type="text"
+            class="form-control"
+            name="phoneNumber"
+            id="field_phoneNumber"
+            data-cy="phoneNumber"
+            formControlName="phoneNumber"
+          />
+          @if (phoneNumberRef.invalid && (phoneNumberRef.dirty || phoneNumberRef.touched)) {
+            <div>
+              @if (editForm.get('phoneNumber')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '20' }"
+                  >This field cannot be longer than 20 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let addressRef = editForm.get('address')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_address" jhiTranslate="patientMonitorApp.patient.address">Address</label>
+          <input type="text" class="form-control" name="address" id="field_address" data-cy="address" formControlName="address" />
+          @if (addressRef.invalid && (addressRef.dirty || addressRef.touched)) {
+            <div>
+              @if (editForm.get('address')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '500' }"
+                  >This field cannot be longer than 500 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let patientTypeRef = editForm.get('patientType')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_patientType" jhiTranslate="patientMonitorApp.patient.patientType">Patient Type</label>
+          <select class="form-control" name="patientType" formControlName="patientType" id="field_patientType" data-cy="patientType">
+            <option [ngValue]="null">{{ 'patientMonitorApp.PatientType.null' | translate }}</option>
+            @for (patientType of patientTypeValues; track $index) {
+              <option [value]="patientType">{{ 'patientMonitorApp.PatientType.' + patientType | translate }}</option>
+            }
+          </select>
+          @if (patientTypeRef.invalid && (patientTypeRef.dirty || patientTypeRef.touched)) {
+            <div>
+              @if (editForm.get('patientType')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let patientSubtypeRef = editForm.get('patientSubtype')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_patientSubtype" jhiTranslate="patientMonitorApp.patient.patientSubtype"
+            >Patient Subtype</label
+          >
+          <select
+            class="form-control"
+            name="patientSubtype"
+            formControlName="patientSubtype"
+            id="field_patientSubtype"
+            data-cy="patientSubtype"
+          >
+            <option [ngValue]="null">{{ 'patientMonitorApp.PatientSubtype.null' | translate }}</option>
+            @for (patientSubtype of patientSubtypeValues; track $index) {
+              <option [value]="patientSubtype">{{ 'patientMonitorApp.PatientSubtype.' + patientSubtype | translate }}</option>
+            }
+          </select>
+          @if (patientSubtypeRef.invalid && (patientSubtypeRef.dirty || patientSubtypeRef.touched)) {
+            <div>
+              @if (editForm.get('patientSubtype')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dateOfBirthRef = editForm.get('dateOfBirth')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dateOfBirth" jhiTranslate="patientMonitorApp.patient.dateOfBirth">Date Of Birth</label>
+          <div class="input-group">
+            <input
+              id="field_dateOfBirth"
+              data-cy="dateOfBirth"
+              type="text"
+              class="form-control"
+              name="dateOfBirth"
+              ngbDatepicker
+              #dateOfBirthDp="ngbDatepicker"
+              formControlName="dateOfBirth"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dateOfBirthDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dateOfBirthRef.invalid && (dateOfBirthRef.dirty || dateOfBirthRef.touched)) {
+            <div>
+              @if (editForm.get('dateOfBirth')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let genderRef = editForm.get('gender')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_gender" jhiTranslate="patientMonitorApp.patient.gender">Gender</label>
+          <input type="text" class="form-control" name="gender" id="field_gender" data-cy="gender" formControlName="gender" />
+          @if (genderRef.invalid && (genderRef.dirty || genderRef.touched)) {
+            <div>
+              @if (editForm.get('gender')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '10' }"
+                  >This field cannot be longer than 10 characters.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_hba1c" jhiTranslate="patientMonitorApp.patient.hba1c">Hba 1 C</label>
+          <input type="number" class="form-control" name="hba1c" id="field_hba1c" data-cy="hba1c" formControlName="hba1c" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_bmi" jhiTranslate="patientMonitorApp.patient.bmi">Bmi</label>
+          <input type="number" class="form-control" name="bmi" id="field_bmi" data-cy="bmi" formControlName="bmi" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fev1Baseline" jhiTranslate="patientMonitorApp.patient.fev1Baseline">Fev 1 Baseline</label>
+          <input
+            type="number"
+            class="form-control"
+            name="fev1Baseline"
+            id="field_fev1Baseline"
+            data-cy="fev1Baseline"
+            formControlName="fev1Baseline"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_user" jhiTranslate="patientMonitorApp.patient.user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
+            @if (!editForm.get('user')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.login }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
+          <div>
+            @if (editForm.get(['user'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_doctor" jhiTranslate="patientMonitorApp.patient.doctor">Doctor</label>
+          <select
+            class="form-control"
+            id="field_doctor"
+            data-cy="doctor"
+            name="doctor"
+            formControlName="doctor"
+            [compareWith]="compareDoctor"
+          >
+            @if (!editForm.get('doctor')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (doctorOption of doctorsSharedCollection; track $index) {
+              <option [ngValue]="doctorOption">{{ doctorOption.specialization }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['doctor'])!.invalid && (editForm.get(['doctor'])!.dirty || editForm.get(['doctor'])!.touched)) {
+          <div>
+            @if (editForm.get(['doctor'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

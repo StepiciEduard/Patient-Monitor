@@ -42,14 +42,16 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
-  messages:
-    cache-duration: PT1S # 1 second, see the ISO 8601 standard
-  thymeleaf:
-    cache: false
+    host: smtp.gmail.com
+    port: 587
+    username: edutuandrey@gmail.com
+    password: cskz zbtz ajdj srup
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: smtp.gmail.com
 
 server:
   port: 8080
@@ -105,3 +107,6 @@ jhipster:
 # ===================================================================
 
 # application:
+
+anthropic:
+  api-key: ${ANTHROPIC_API_KEY:placeholder}

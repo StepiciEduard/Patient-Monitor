@@ -1,0 +1,161 @@
+<div class="doctor-dashboard">
+  @if (loading) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Se incarca datele...</p>
+    </div>
+  }
+
+  @if (error) {
+    <div class="error-state">
+      <strong>Eroare!</strong> Nu s-au putut incarca datele.
+      <button class="retry-btn" (click)="loadData()">Reincearca</button>
+    </div>
+  }
+
+  @if (data && !loading) {
+    <!-- Header -->
+    <div class="dashboard-header">
+      <div class="header-info">
+        <h2>Dashboard Medical</h2>
+        <p class="subtitle">{{ data.doctorName }} — {{ data.specialization }}</p>
+      </div>
+      <div class="header-stats">
+        <div class="stat-card">
+          <span class="stat-value">{{ data.totalPatients }}</span>
+          <span class="stat-label">Pacienti</span>
+        </div>
+        <div class="stat-card stat-stable">
+          <span class="stat-value">{{ getStableCount() }}</span>
+          <span class="stat-label">Stabili</span>
+        </div>
+        <div class="stat-card stat-alert">
+          <span class="stat-value">{{ getAlertCount() }}</span>
+          <span class="stat-label">Alerta</span>
+        </div>
+        <div class="stat-card stat-critical">
+          <span class="stat-value">{{ getCriticalCount() }}</span>
+          <span class="stat-label">Critici</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Patients Table -->
+    <div class="patients-section">
+      <h3 class="section-title">Pacientii mei</h3>
+      <div class="patients-table-wrapper">
+        <table class="patients-table">
+          <thead>
+            <tr>
+              <th>Pacient</th>
+              <th>Tip</th>
+              <th>Status</th>
+              <th>Puls</th>
+              <th>SpO2</th>
+              <th>Temp</th>
+              <th>TA</th>
+              <th>Anomalii 24h</th>
+              <th>Actiuni</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (patient of data.patients; track patient.id) {
+              <tr>
+                <td>
+                  <div class="patient-name">
+                    <a [routerLink]="['/doctor/patient', patient.id]" class="patient-link">
+                      {{ patient.lastName }} {{ patient.firstName }}
+                    </a>
+                    <small class="patient-meta">{{ patient.gender === 'M' ? 'Masculin' : 'Feminin' }}</small>
+                  </div>
+                </td>
+                <td>
+                  <span class="type-badge" [class]="'type-' + patient.patientType.toLowerCase()">
+                    {{ getTypeLabel(patient.patientType) }}
+                  </span>
+                </td>
+                <td>
+                  <span class="status-badge" [class]="getStatusClass(patient.status)">
+                    {{ getStatusLabel(patient.status) }}
+                  </span>
+                </td>
+                <td>
+                  @if (patient.latestReading) {
+                    <span [class.text-danger]="patient.latestReading.heartRate > 100 || patient.latestReading.heartRate < 60">
+                      {{ patient.latestReading.heartRate }} bpm
+                    </span>
+                  } @else {
+                    <span class="no-data">--</span>
+                  }
+                </td>
+                <td>
+                  @if (patient.latestReading) {
+                    <span [class.text-danger]="patient.latestReading.spo2 < 93"> {{ patient.latestReading.spo2 }}% </span>
+                  } @else {
+                    <span class="no-data">--</span>
+                  }
+                </td>
+                <td>
+                  @if (patient.latestReading) {
+                    <span [class.text-danger]="patient.latestReading.temperature > 37.5">
+                      {{ patient.latestReading.temperature }}&#176;C
+                    </span>
+                  } @else {
+                    <span class="no-data">--</span>
+                  }
+                </td>
+                <td>
+                  @if (patient.latestReading) {
+                    <span [class.text-danger]="patient.latestReading.systolicBp > 140">
+                      {{ patient.latestReading.systolicBp }}/{{ patient.latestReading.diastolicBp }}
+                    </span>
+                  } @else {
+                    <span class="no-data">--</span>
+                  }
+                </td>
+                <td>
+                  @if (patient.anomalies24h > 0) {
+                    <span class="anomaly-badge">{{ patient.anomalies24h }}</span>
+                  } @else {
+                    <span class="no-anomaly">0</span>
+                  }
+                </td>
+                <td>
+                  <div class="action-buttons">
+                    <a [routerLink]="['/doctor/patient', patient.id]" class="btn-view" title="Vizualizeaza"> 📊 </a>
+                    <button class="btn-notify" (click)="openNotifyModal(patient)" title="Recomanda control">🔔</button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Notification Modal -->
+    @if (showNotifyModal && notifyPatient) {
+      <div class="modal-overlay" (click)="closeNotifyModal()">
+        <div class="modal-card" (click)="$event.stopPropagation()">
+          <h3>Trimite notificare</h3>
+          <p class="modal-subtitle">Catre: {{ notifyPatient.lastName }} {{ notifyPatient.firstName }}</p>
+
+          @if (notifySuccess) {
+            <div class="modal-success">Notificare trimisa cu succes!</div>
+          } @else {
+            <div class="modal-form">
+              <label for="notifyMsg">Mesaj:</label>
+              <textarea id="notifyMsg" class="form-input" rows="3" [(ngModel)]="notifyMessage"></textarea>
+              <div class="modal-actions">
+                <button class="btn-cancel" (click)="closeNotifyModal()">Anuleaza</button>
+                <button class="btn-send" (click)="sendNotification()" [disabled]="notifySending">
+                  {{ notifySending ? 'Se trimite...' : 'Trimite' }}
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  }
+</div>

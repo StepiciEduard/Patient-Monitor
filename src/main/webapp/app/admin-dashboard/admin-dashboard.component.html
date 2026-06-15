@@ -1,0 +1,90 @@
+<div class="admin-dashboard">
+  <div class="dashboard-header">
+    <div class="header-info">
+      <h2>Admin Dashboard</h2>
+      <p class="subtitle">Statistici sistem de monitorizare</p>
+    </div>
+  </div>
+
+  @if (stats) {
+    <div class="stats-row">
+      <div class="stat-card">
+        <span class="stat-icon">👥</span>
+        <span class="stat-value">{{ stats.totalUsers }}</span>
+        <span class="stat-label">Total Utilizatori</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🩺</span>
+        <span class="stat-value">{{ stats.totalDoctors }}</span>
+        <span class="stat-label">Doctori</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-icon">🏥</span>
+        <span class="stat-value">{{ stats.totalPatients }}</span>
+        <span class="stat-label">Pacienti</span>
+      </div>
+      <div class="stat-card stat-cardiac">
+        <span class="stat-icon">❤️</span>
+        <span class="stat-value">{{ stats.cardiacPatients }}</span>
+        <span class="stat-label">Cardiaci</span>
+      </div>
+      <div class="stat-card stat-diabetes">
+        <span class="stat-icon">💉</span>
+        <span class="stat-value">{{ stats.diabetesPatients }}</span>
+        <span class="stat-label">Diabet</span>
+      </div>
+      <div class="stat-card stat-respiratory">
+        <span class="stat-icon">🫁</span>
+        <span class="stat-value">{{ stats.respiratoryPatients }}</span>
+        <span class="stat-label">Respiratorii</span>
+      </div>
+      <div class="stat-card stat-anomaly">
+        <span class="stat-icon">⚠️</span>
+        <span class="stat-value">{{ stats.anomaliesToday }}</span>
+        <span class="stat-label">Anomalii azi</span>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="quick-links">
+      <h3 class="section-title">Acces rapid</h3>
+      <div class="links-grid">
+        <a routerLink="/doctor" class="quick-link">
+          <span class="link-icon">🩺</span>
+          <span class="link-label">Gestionare Doctori</span>
+          <span class="link-count">{{ stats.totalDoctors }} inregistrati</span>
+        </a>
+        <a routerLink="/patient" class="quick-link">
+          <span class="link-icon">🏥</span>
+          <span class="link-label">Gestionare Pacienti</span>
+          <span class="link-count">{{ stats.totalPatients }} inregistrati</span>
+        </a>
+        <a routerLink="/notification" class="quick-link">
+          <span class="link-icon">🔔</span>
+          <span class="link-label">Notificari</span>
+          <span class="link-count">Vizualizeaza alertele</span>
+        </a>
+        <a routerLink="/admin/user-management" class="quick-link">
+          <span class="link-icon">👤</span>
+          <span class="link-label">User Management</span>
+          <span class="link-count">{{ stats.totalUsers }} utilizatori</span>
+        </a>
+        <a routerLink="/medical-data" class="quick-link">
+          <span class="link-icon">📊</span>
+          <span class="link-label">Date Medicale</span>
+          <span class="link-count">Vizualizeaza datele</span>
+        </a>
+        <a routerLink="/admin/health" class="quick-link">
+          <span class="link-icon">💚</span>
+          <span class="link-label">Health Check</span>
+          <span class="link-count">Status sistem</span>
+        </a>
+      </div>
+    </div>
+  } @else {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Se incarca statisticile...</p>
+    </div>
+  }
+</div>

@@ -1,7 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 import { Registration } from './register.model';
 
@@ -12,5 +11,9 @@ export class RegisterService {
 
   save(registration: Registration): Observable<{}> {
     return this.http.post(this.applicationConfigService.getEndpointFor('api/register'), registration);
+  }
+
+  getDoctors(): Observable<any[]> {
+    return this.http.get<any[]>(this.applicationConfigService.getEndpointFor('api/public/doctors'));
   }
 }

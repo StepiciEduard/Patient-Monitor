@@ -1,0 +1,9 @@
+{
+  "patientMonitorApp": {
+    "ChatRole": {
+      "null": "",
+      "USER": "USER",
+      "ASSISTANT": "ASSISTANT"
+    }
+  }
+}

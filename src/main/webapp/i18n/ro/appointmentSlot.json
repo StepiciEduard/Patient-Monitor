@@ -1,0 +1,27 @@
+{
+  "patientMonitorApp": {
+    "appointmentSlot": {
+      "home": {
+        "title": "Appointment Slots",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Appointment Slot",
+        "createOrEditLabel": "Creeare sau editare Appointment Slot",
+        "notFound": "No Appointment Slots found"
+      },
+      "created": "A fost creată o nouă entitate Appointment Slot cu identificatorul {{ param }}",
+      "updated": "Appointment Slot cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Appointment Slot cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Appointment Slot {{ id }}?"
+      },
+      "detail": {
+        "title": "Appointment Slot"
+      },
+      "id": "ID",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "isAvailable": "Is Available",
+      "doctor": "Doctor"
+    }
+  }
+}

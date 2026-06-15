@@ -1,0 +1,90 @@
+@if (isVisible) {
+  <!-- Chat Panel -->
+  @if (isOpen) {
+    <div class="chat-panel">
+      <div class="chat-header">
+        <div class="chat-header-info">
+          <span class="chat-avatar">🤖</span>
+          <div>
+            <span class="chat-title">Dr. AI Assistant</span>
+            <span class="chat-status">Online</span>
+          </div>
+        </div>
+        <div class="chat-header-actions">
+          <button class="btn-clear" (click)="clearChat()" title="Reseteaza conversatia">🗑️</button>
+          <button class="btn-close-chat" (click)="toggleChat()">✕</button>
+        </div>
+      </div>
+
+      <div class="chat-messages">
+        @for (msg of messages; track msg.timestamp) {
+          <div class="message" [class.user]="msg.role === 'user'" [class.assistant]="msg.role === 'assistant'">
+            @if (msg.role === 'assistant') {
+              <span class="msg-avatar">🤖</span>
+            }
+            <div class="msg-bubble">
+              <div class="msg-content" [innerHTML]="msg.html"></div>
+              <span class="msg-time">
+                {{ msg.timestamp | date: 'HH:mm' }}
+              </span>
+            </div>
+          </div>
+        }
+
+        @if (isLoading) {
+          <div class="message assistant">
+            <span class="msg-avatar">🤖</span>
+            <div class="msg-bubble typing">
+              <span class="dot"></span>
+              <span class="dot"></span>
+              <span class="dot"></span>
+            </div>
+          </div>
+        }
+      </div>
+
+      <div class="chat-input">
+        <textarea
+          class="input-field"
+          [(ngModel)]="userMessage"
+          (keydown)="onKeyPress($event)"
+          placeholder="Scrie un mesaj..."
+          rows="1"
+        ></textarea>
+        <button class="btn-send" (click)="sendMessage()" [disabled]="!userMessage.trim() || isLoading">➤</button>
+      </div>
+    </div>
+  }
+
+  <!-- Floating Bubble -->
+  <button class="chat-bubble" (click)="toggleChat()" [class.open]="isOpen">
+    @if (!isOpen) {
+      <svg class="doctor-robot-icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <!-- Robot head -->
+        <rect x="16" y="14" width="32" height="28" rx="6" fill="#38bdf8" />
+        <!-- Eyes -->
+        <circle cx="26" cy="26" r="4" fill="#0f1923" />
+        <circle cx="38" cy="26" r="4" fill="#0f1923" />
+        <circle cx="27" cy="25" r="1.5" fill="#fff" />
+        <circle cx="39" cy="25" r="1.5" fill="#fff" />
+        <!-- Mouth / smile -->
+        <path d="M24 34 Q32 40 40 34" stroke="#0f1923" stroke-width="2" fill="none" stroke-linecap="round" />
+        <!-- Antenna -->
+        <line x1="32" y1="14" x2="32" y2="8" stroke="#38bdf8" stroke-width="2" />
+        <circle cx="32" cy="6" r="3" fill="#4ade80" />
+        <!-- Doctor hat / cross -->
+        <rect x="28" y="2" width="8" height="4" rx="1" fill="#fff" opacity="0.9" />
+        <rect x="30" y="16" width="4" height="8" rx="1" fill="#fff" opacity="0.7" />
+        <rect x="27" y="18" width="10" height="4" rx="1" fill="#fff" opacity="0.7" />
+        <!-- Stethoscope hint -->
+        <path d="M16 32 Q10 36 14 44 Q16 48 22 46" stroke="#4ade80" stroke-width="2" fill="none" stroke-linecap="round" />
+        <circle cx="22" cy="46" r="2" fill="#4ade80" />
+        <!-- Body hint -->
+        <rect x="20" y="42" width="24" height="14" rx="4" fill="#38bdf8" opacity="0.6" />
+        <rect x="28" y="44" width="8" height="10" rx="2" fill="#fff" opacity="0.3" />
+      </svg>
+    } @else {
+      <span class="close-icon">✕</span>
+    }
+  </button>
+}

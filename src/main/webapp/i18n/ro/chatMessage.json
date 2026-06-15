@@ -1,0 +1,29 @@
+{
+  "patientMonitorApp": {
+    "chatMessage": {
+      "home": {
+        "title": "Chat Messages",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Chat Message",
+        "createOrEditLabel": "Creeare sau editare Chat Message",
+        "notFound": "No Chat Messages found"
+      },
+      "created": "A fost creată o nouă entitate Chat Message cu identificatorul {{ param }}",
+      "updated": "Chat Message cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Chat Message cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Chat Message {{ id }}?"
+      },
+      "detail": {
+        "title": "Chat Message"
+      },
+      "id": "ID",
+      "role": "Role",
+      "content": "Content",
+      "createdAt": "Created At",
+      "contextStartDate": "Context Start Date",
+      "contextEndDate": "Context End Date",
+      "patient": "Patient"
+    }
+  }
+}

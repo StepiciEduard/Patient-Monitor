@@ -1,58 +1,58 @@
-<div>
-  <div class="d-flex justify-content-center">
-    <div class="col-lg-6 col-md-8 col-sm-10">
-      <h1 data-cy="loginTitle" jhiTranslate="login.title">Sign in</h1>
-      @if (authenticationError()) {
-        <div class="alert alert-danger" data-cy="loginError" jhiTranslate="login.messages.error.authentication">
-          <strong>Failed to sign in!</strong> Please check your credentials and try again.
-        </div>
-      }
-      <form class="form" (ngSubmit)="login()" [formGroup]="loginForm">
-        <div class="mb-3">
-          <label class="username-label" for="username" jhiTranslate="global.form.username.label">Username</label>
-          <input
-            type="text"
-            class="form-control"
-            name="username"
-            id="username"
-            placeholder="{{ 'global.form.username.placeholder' | translate }}"
-            formControlName="username"
-            data-cy="username"
-          />
-        </div>
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <span class="login-icon">🔐</span>
+      <h1 data-cy="loginTitle">Autentificare</h1>
+      <p>Introduceți credențialele pentru a accesa platforma</p>
+    </div>
 
-        <div class="mb-3">
-          <label for="password" jhiTranslate="login.form.password">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            name="password"
-            id="password"
-            placeholder="{{ 'login.form.password.placeholder' | translate }}"
-            formControlName="password"
-            data-cy="password"
-          />
-        </div>
-
-        <div class="form-check">
-          <label class="form-check-label" for="rememberMe">
-            <input class="form-check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
-            <span jhiTranslate="login.form.rememberme">Remember me</span>
-          </label>
-        </div>
-
-        <button type="submit" class="btn btn-primary" data-cy="submit" jhiTranslate="login.form.button">Sign in</button>
-      </form>
-      <div class="mt-3 alert alert-warning">
-        <a class="alert-link" routerLink="/account/reset/request" data-cy="forgetYourPasswordSelector" jhiTranslate="login.password.forgot"
-          >Did you forget your password?</a
-        >
+    @if (authenticationError()) {
+      <div class="login-error" data-cy="loginError">
+        <strong>Autentificare eșuată!</strong> Verificați credențialele și încercați din nou.
       </div>
+    }
 
-      <div class="alert alert-warning">
-        <span jhiTranslate="global.messages.info.register.noaccount">You don&apos;t have an account yet?</span>
-        <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Register a new account</a>
+    <form class="login-form" (ngSubmit)="login()" [formGroup]="loginForm">
+      <div class="form-group">
+        <label for="username">Nume utilizator</label>
+        <input
+          type="text"
+          class="form-input"
+          name="username"
+          id="username"
+          #usernameInput
+          placeholder="Introduceți numele de utilizator"
+          formControlName="username"
+          data-cy="username"
+          autocomplete="username"
+        />
       </div>
+      <div class="form-group">
+        <label for="password">Parolă</label>
+        <input
+          type="password"
+          class="form-input"
+          name="password"
+          id="password"
+          placeholder="Introduceți parola"
+          formControlName="password"
+          data-cy="password"
+          autocomplete="current-password"
+        />
+      </div>
+      <div class="form-check-group">
+        <label class="check-label">
+          <input class="check-input" type="checkbox" name="rememberMe" id="rememberMe" formControlName="rememberMe" />
+          <span>Ține-mă minte</span>
+        </label>
+      </div>
+      <button type="submit" class="login-btn" data-cy="submit">Autentificare</button>
+    </form>
+
+    <div class="login-footer">
+      <a routerLink="/account/reset/request" data-cy="forgetYourPasswordSelector">Ai uitat parola?</a>
+      <span class="divider">•</span>
+      <a routerLink="/account/register">Creează cont nou</a>
     </div>
   </div>
 </div>

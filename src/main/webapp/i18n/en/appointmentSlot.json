@@ -1,0 +1,27 @@
+{
+  "patientMonitorApp": {
+    "appointmentSlot": {
+      "home": {
+        "title": "Appointment Slots",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Appointment Slot",
+        "createOrEditLabel": "Create or edit a Appointment Slot",
+        "notFound": "No Appointment Slots found"
+      },
+      "created": "A new Appointment Slot is created with identifier {{ param }}",
+      "updated": "A Appointment Slot is updated with identifier {{ param }}",
+      "deleted": "A Appointment Slot is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Appointment Slot {{ id }}?"
+      },
+      "detail": {
+        "title": "Appointment Slot"
+      },
+      "id": "ID",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "isAvailable": "Is Available",
+      "doctor": "Doctor"
+    }
+  }
+}

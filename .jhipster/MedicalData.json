@@ -1,0 +1,85 @@
+{
+  "annotations": {
+    "changelogDate": "20260220132751"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "timestamp",
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "heartRate",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "spo2",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "temperature",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "systolicBp",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "diastolicBp",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "hrv",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "qtInterval",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "bnp",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "bloodGlucose",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "respiratoryRate",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "fev1",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "etco2",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "anomalyScore",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "isAnomaly",
+      "fieldType": "Boolean"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "MedicalData",
+  "pagination": "infinite-scroll",
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "patient",
+      "relationshipName": "patient",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}
