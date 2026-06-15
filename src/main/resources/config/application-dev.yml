@@ -42,10 +42,10 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: smtp.gmail.com
+    host: ${MAIL_HOST:smtp.gmail.com}
     port: 587
-    username: edutuandrey@gmail.com
-    password: cskz zbtz ajdj srup
+    username: ${MAIL_USERNAME:placeholder}
+    password: ${MAIL_PASSWORD:placeholder}
     protocol: smtp
     tls: true
     properties.mail.smtp:
